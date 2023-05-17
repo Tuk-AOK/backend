@@ -10,11 +10,11 @@ import java.util.UUID;
 @NoArgsConstructor
 public class UserCreateInfo {
 
-    private UUID uuid;
+    private UUID userUuid;
 
     @Builder
-    public UserCreateInfo(UUID uuid)
+    public UserCreateInfo(UUID userUuid)
     {
-        this.uuid = uuid;
+        this.userUuid = userUuid;
     }
 }

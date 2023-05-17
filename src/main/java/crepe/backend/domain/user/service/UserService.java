@@ -47,41 +47,41 @@ public class UserService {
 
     private UserCreateInfo mapUserEntityToUserCreateInfo(User savedUser) {
         return UserCreateInfo.builder()
-                .uuid(savedUser.getUuid())
+                .userUuid(savedUser.getUuid())
                 .build();
     }
 
     // uuid로 유저 찾기
-    public UserInfo findUserInfoById(UUID user_uuid) {
-        User findUser = findUserByUuId(user_uuid);
+    public UserInfo findUserInfoById(UUID userUuid) {
+        User findUser = findUserByUuId(userUuid);
         return mapUserEntityToUserInfo(findUser);
     }
 
     // uuid를 이용해서 유저가 포함되어있는 프로젝트 찾는 함수
-    public ProjectInfoList findUserProjectById(UUID user_uuid)
+    public ProjectInfoList findUserProjectById(UUID userUuid)
     {
-        User findUser = findUserByUuId(user_uuid);
+        User findUser = findUserByUuId(userUuid);
         List<Project> projects = getProjectList(findUser);
         return getProjectInfoList(projects);
     }
 
-    public void updateUserInfo(UUID user_uuid, Map<String, String> user)
+    public void updateUserInfo(UUID userUuid, Map<String, String> user)
     {
-        User oUser = findUserByUuId(user_uuid);
+        User oUser = findUserByUuId(userUuid);
 
         oUser.updateUser(user.get("email"), user.get("password"), user.get("nickname"), user.get("photo"));
 
         userRepository.save(oUser);
     }
 
-    public void deleteUser(UUID uuid) {
-        User user = findUserByUuId(uuid);
+    public void deleteUser(UUID userUuid) {
+        User user = findUserByUuId(userUuid);
         userRepository.deleteById(user.getId());
     }
 
     private UserInfo mapUserEntityToUserInfo(User savedUser) {
         return UserInfo.builder()
-                .uuid(savedUser.getUuid())
+                .userUuid(savedUser.getUuid())
                 .email(savedUser.getEmail())
                 .nickname(savedUser.getNickname())
                 .photo(savedUser.getPhoto())
@@ -104,9 +104,9 @@ public class UserService {
     }
 
     // 해당 uuid의 유저를 얻기 위한 함수
-    public User findUserByUuId(UUID user_uuid)
+    public User findUserByUuId(UUID userUuid)
     {
-        return userRepository.findUserByUuidAndIsActiveTrue(user_uuid).orElseThrow(NotFoundUserEntityException::new);
+        return userRepository.findUserByUuidAndIsActiveTrue(userUuid).orElseThrow(NotFoundUserEntityException::new);
     }
 
     // 유저가 속해있는 프로젝트 ID를 얻기 위한 함수
@@ -121,11 +121,8 @@ public class UserService {
         return projects;
     }
 
-
-
-
-    public User findUserById(Long id)
+    public User findUserById(Long userId)
     {
-        return userRepository.findUserByIdAndIsActiveTrue(id).orElseThrow(NotFoundUserEntityException::new);
+        return userRepository.findUserByIdAndIsActiveTrue(userId).orElseThrow(NotFoundUserEntityException::new);
     }
 }

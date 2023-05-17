@@ -106,7 +106,7 @@ public class ProjectService {
         List<UserInfo> userInfos = new ArrayList<>();
         for(int i = 0; i < users.size(); i++) {
             userInfos.add(UserInfo.builder()
-                    .uuid(users.get(i).getUuid())
+                    .userUuid(users.get(i).getUuid())
                     .email(users.get(i).getEmail())
                     .nickname(users.get(i).getNickname())
                     .photo(users.get(i).getPhoto())
