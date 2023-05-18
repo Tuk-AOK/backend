@@ -95,8 +95,8 @@ public class UserService {
         for(int i = 0; i < projects.size(); i ++)
         {
             projectInfos.add(ProjectInfo.builder()
-                    .name(projects.get(i).getName())
-                    .uuid(projects.get(i).getUuid())
+                    .projectName(projects.get(i).getName())
+                    .projectUuid(projects.get(i).getUuid())
                     .build());
         }
 

@@ -10,13 +10,13 @@ import java.util.UUID;
 @NoArgsConstructor
 public class BranchLogInfo {
 
-    private UUID uuid;
-    private String message;
+    private UUID logUuid;
+    private String logMessage;
 
     @Builder
-    public BranchLogInfo(UUID uuid, String message)
+    public BranchLogInfo(UUID logUuid, String logMessage)
     {
-        this.uuid = uuid;
-        this.message = message;
+        this.logUuid = logUuid;
+        this.logMessage = logMessage;
     }
 }

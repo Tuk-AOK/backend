@@ -12,15 +12,15 @@ import java.util.UUID;
 @NoArgsConstructor
 public class LogFeedbackInfo {
     private UUID userUuid;
-    private String message;
-    private UUID uuid;
+    private String feedbackMessage;
+    private UUID feedbackUuid;
 
     @Builder
     public LogFeedbackInfo(UUID feedbackUserUuid,
                            String feedbackMessage,
                            UUID feedbackUuid) {
         this.userUuid = feedbackUserUuid;
-        this.message = feedbackMessage;
-        this.uuid = feedbackUuid;
+        this.feedbackMessage = feedbackMessage;
+        this.feedbackUuid = feedbackUuid;
     }
 }

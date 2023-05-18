@@ -118,8 +118,8 @@ public class ProjectService {
         List<ProjectBranchInfo> projectBranchInfos = new ArrayList<>();
         for(int i = 0; i < branches.size(); i++) {
             projectBranchInfos.add(ProjectBranchInfo.builder()
-                    .name(branches.get(i).getName())
-                    .uuid(branches.get(i).getUuid())
+                    .branchName(branches.get(i).getName())
+                    .branchUuid(branches.get(i).getUuid())
                     .build());
         }
         return new ProjectBranchInfoList(projectBranchInfos);
@@ -139,8 +139,8 @@ public class ProjectService {
 
     private ProjectInfo mapProjectEntityToProjectInfoResponse(Project project) {
         return ProjectInfo.builder()
-                .name(project.getName())
-                .uuid(project.getUuid())
+                .projectName(project.getName())
+                .projectUuid(project.getUuid())
                 .build();
     }
 

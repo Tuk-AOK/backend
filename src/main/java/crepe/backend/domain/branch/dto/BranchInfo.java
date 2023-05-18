@@ -9,13 +9,13 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 public class BranchInfo {
-    private Long id;
-    private String name;
+    private Long branchId;
+    private String branchName;
 
 
     @Builder
-    public BranchInfo(Long id, String name) {
-        this.id = id;
-        this.name = name;
+    public BranchInfo(Long branchId, String branchName) {
+        this.branchId = branchId;
+        this.branchName = branchName;
     }
 }

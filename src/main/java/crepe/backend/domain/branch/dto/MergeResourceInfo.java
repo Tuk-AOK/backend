@@ -8,16 +8,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MergeResourceInfo {
 
-    private String name;
-    private String link;
+    private String fileName;
+    private String fileLink;
     private boolean isDuplicated;
 
     private boolean isNew;
 
     @Builder
-    public MergeResourceInfo(String name, String link, boolean isDuplicated, boolean isNew) {
-        this.name = name;
-        this.link = link;
+    public MergeResourceInfo(String fileName, String fileLink, boolean isDuplicated, boolean isNew) {
+        this.fileName = fileName;
+        this.fileLink = fileLink;
         this.isDuplicated = isDuplicated;
         this.isNew = isNew; //새로 추가된-변경된 파일인가
     }

@@ -10,12 +10,12 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 public class LogUuidInfo {
-    private UUID uuid;
-    private LocalDateTime createdAt;
+    private UUID logUuid;
+    private LocalDateTime logCreatedAt;
 
     @Builder
-    public LogUuidInfo(UUID uuid, LocalDateTime createdAt) {
-        this.uuid = uuid;
-        this.createdAt = createdAt;
+    public LogUuidInfo(UUID logUuid, LocalDateTime logCreatedAt) {
+        this.logUuid = logUuid;
+        this.logCreatedAt = logCreatedAt;
     }
 }

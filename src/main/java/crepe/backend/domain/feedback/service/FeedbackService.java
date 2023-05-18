@@ -53,7 +53,7 @@ public class FeedbackService {
     private FeedbackCreateInfo mapFeedbackToFeedbackCreateInfo(Feedback feedback)
     {
         return FeedbackCreateInfo.builder()
-                .uuid(feedback.getUuid())
+                .feedbackUuid(feedback.getUuid())
                 .build();
     }
 }

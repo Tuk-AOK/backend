@@ -60,15 +60,15 @@ public class BranchService {
 
     private BranchCreateInfo mapBranchEntityToBranchCreateInfo(Branch savedata) { // Branch 타입을 BranchCreateInfo 타입으로 변환하는 모듈
         return BranchCreateInfo.builder()
-                .uuid(savedata.getUuid())
+                .branchUuid(savedata.getUuid())
                 .build();
     }
 
     private BranchInfo mapBranchEntityToBranchInfo(Branch branch) // Branch 타입을 BranchInfo 타입으로 변환하는 모듈
     {
         return BranchInfo.builder()
-                .name(branch.getName())
-                .id(branch.getId())
+                .branchName(branch.getName())
+                .branchId(branch.getId())
                 .build();
     }
 
@@ -79,8 +79,8 @@ public class BranchService {
         for(int i = 0; i < logs.size(); i ++)
         {
             logInfos.add(BranchLogInfo.builder()
-                    .uuid(logs.get(i).getUuid())
-                    .message(logs.get(i).getMessage())
+                    .logUuid(logs.get(i).getUuid())
+                    .logMessage(logs.get(i).getMessage())
                     .build());
         }
 
@@ -125,7 +125,7 @@ public class BranchService {
         Branch branch = findBranchByUuid(uuid);
         Log log = getRecentLogByBranch(branch);
         return BranchRecentLogInfo.builder()
-                .uuid(log.getUuid())
+                .logUuid(log.getUuid())
                 .build();
     }
 
@@ -290,8 +290,8 @@ public class BranchService {
         System.out.println("==============================");
         System.out.println("<mergeResourceInfo>");
         for (MergeResourceInfo mergeResourceInfo: mergeResourceInfos){
-            System.out.println(mergeResourceInfo.getName());
-            System.out.println(mergeResourceInfo.getLink());
+            System.out.println(mergeResourceInfo.getFileName());
+            System.out.println(mergeResourceInfo.getFileLink());
         }
 
         return mergeResourceInfos;
@@ -310,8 +310,8 @@ public class BranchService {
                                                    boolean isDuplicated,
                                                    boolean isNew) {
         return MergeResourceInfo.builder()
-                .name(name)
-                .link(link)
+                .fileName(name)
+                .fileLink(link)
                 .isDuplicated(isDuplicated)
                 .isNew(isNew)
                 .build();

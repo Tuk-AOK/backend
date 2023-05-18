@@ -14,12 +14,12 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 public class ProjectInfo {
-    private String name;
-    private UUID uuid;
+    private String projectName;
+    private UUID projectUuid;
 
     @Builder
-    public ProjectInfo(String name, UUID uuid) {
-        this.name = name;
-        this.uuid = uuid;
+    public ProjectInfo(String projectName, UUID projectUuid) {
+        this.projectName = projectName;
+        this.projectUuid = projectUuid;
     }
 }
