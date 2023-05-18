@@ -41,8 +41,8 @@ public class LogService {
 
     public LogUuidInfo createLogUuidInfo(Log log) {
         return LogUuidInfo.builder()
-                .uuid(log.getUuid())
-                .createdAt(log.getCreatedAt())
+                .logUuid(log.getUuid())
+                .logCreatedAt(log.getCreatedAt())
                 .build();
     }
     public Log createLog(LogCreateRequest request) {
@@ -73,8 +73,8 @@ public class LogService {
 
         return LogInfo.builder()
                 .userUuid(log.getUuid())
-                .message(log.getMessage())
-                .createdAt(log.getCreatedAt())
+                .logMessage(log.getMessage())
+                .logCreatedAt(log.getCreatedAt())
                 .resourceInfos(getResourceInfoList(resources))
                 .feedbackInfos(getLogFeedbackInfoList(feedbacks))
                 .build();

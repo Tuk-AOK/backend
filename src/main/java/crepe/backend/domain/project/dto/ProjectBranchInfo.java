@@ -10,12 +10,12 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ProjectBranchInfo {
 
-    private String name;
-    private UUID uuid;
+    private String branchName;
+    private UUID branchUuid;
 
     @Builder
-    public ProjectBranchInfo(String name, UUID uuid) {
-        this.name = name;
-        this.uuid = uuid;
+    public ProjectBranchInfo(String branchName, UUID branchUuid) {
+        this.branchName = branchName;
+        this.branchUuid = branchUuid;
     }
 }

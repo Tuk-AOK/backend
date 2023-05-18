@@ -10,11 +10,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FeedbackCreateInfo {
 
-    private UUID uuid;
+    private UUID feedbackUuid;
 
     @Builder
-    public FeedbackCreateInfo(UUID uuid)
+    public FeedbackCreateInfo(UUID feedbackUuid)
     {
-        this.uuid = uuid;
+        this.feedbackUuid = feedbackUuid;
     }
 }

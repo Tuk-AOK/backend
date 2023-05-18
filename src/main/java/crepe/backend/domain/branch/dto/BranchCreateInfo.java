@@ -10,12 +10,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BranchCreateInfo {
 
-    private UUID uuid;
+    private UUID branchUuid;
 
     @Builder
-    public BranchCreateInfo(UUID uuid)
+    public BranchCreateInfo(UUID branchUuid)
     {
-        this.uuid = uuid;
+        this.branchUuid = branchUuid;
     }
 
 }

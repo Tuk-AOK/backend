@@ -10,10 +10,10 @@ import java.util.UUID;
 @NoArgsConstructor
 public class BranchRecentLogInfo {
 
-    private UUID uuid;
+    private UUID logUuid;
 
     @Builder
-    public BranchRecentLogInfo(UUID uuid) {
-        this.uuid = uuid;
+    public BranchRecentLogInfo(UUID logUuid) {
+        this.logUuid = logUuid;
     }
 }
