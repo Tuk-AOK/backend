@@ -72,7 +72,7 @@ public class LogService {
         List<Feedback> feedbacks = feedbackRepository.findAllByLogAndIsActiveTrueOrderByCreatedAtDesc(log);
 
         return LogInfo.builder()
-                .userUuid(log.getUuid())
+                .userUuid(log.getUser().getUuid())
                 .logMessage(log.getMessage())
                 .logCreatedAt(log.getCreatedAt())
                 .resourceInfos(getResourceInfoList(resources))
