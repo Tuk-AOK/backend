@@ -38,6 +38,9 @@ public class Branch extends BaseEntity {
     @OneToMany(mappedBy = "branch")
     private List<Log> logs = new ArrayList<>();
 
+    @OneToMany(mappedBy = "branch")
+    private List<Feedback> feedbacks = new ArrayList<>();
+
     @Builder
     public Branch(Project project, String name) {
         this.project = project;

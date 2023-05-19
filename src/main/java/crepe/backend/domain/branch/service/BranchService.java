@@ -3,6 +3,8 @@ package crepe.backend.domain.branch.service;
 import crepe.backend.domain.branch.domain.entity.Branch;
 import crepe.backend.domain.branch.domain.repository.BranchRepository;
 import crepe.backend.domain.branch.dto.*;
+import crepe.backend.domain.feedback.domain.entity.Feedback;
+import crepe.backend.domain.feedback.domain.repository.FeedbackRepository;
 import crepe.backend.domain.log.domain.entity.Layer;
 import crepe.backend.domain.log.domain.entity.Log;
 import crepe.backend.domain.log.domain.entity.Resource;
@@ -30,6 +32,7 @@ public class BranchService {
     private final LogRepository logRepository;
     private final LayerRepository layerRepository;
     private final ResourceRepository resourceRepository;
+    private final FeedbackRepository feedbackRepository;
 
 
     public BranchCreateInfo branchCreate(BranchCreate createRequest) { // 브랜치를 생성하는 모듈
@@ -70,6 +73,30 @@ public class BranchService {
                 .branchName(branch.getName())
                 .branchId(branch.getId())
                 .build();
+    }
+
+    public List<BranchFeedbackInfo> findFeedbackInfoByUuid(UUID branchUuid)
+    {
+        Branch findBranch = findBranchByUuid(branchUuid);
+        return mapBranchEntityToBranchFeedbackInfos(getFeedbackListByBranch(findBranch));
+    }
+
+    private List<BranchFeedbackInfo> mapBranchEntityToBranchFeedbackInfos(List<Feedback> feedbacks) // Branch 타입을 BranchInfo 타입으로 변환하는 모듈
+    {
+        List<BranchFeedbackInfo> branchFeedbackInfos = new ArrayList<>();
+        for(Feedback feedback: feedbacks) {
+            branchFeedbackInfos.add(BranchFeedbackInfo.builder()
+                    .feedbackMessage(feedback.getMessage())
+                    .feedbackUserUuid(feedback.getUser().getUuid())
+                    .feedbackUuid(feedback.getUuid())
+                    .build());
+        }
+        return branchFeedbackInfos;
+    }
+
+    private List<Feedback> getFeedbackListByBranch(Branch branch)
+    {
+        return feedbackRepository.findAllByBranchAndIsActiveTrueOrderByCreatedAtDesc(branch);
     }
 
     private BranchLogInfoList getLogInfoList(List<Log> logs) // LogInfo들을 LogInfoList로 변환하는 모듈

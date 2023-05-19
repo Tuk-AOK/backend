@@ -28,8 +28,8 @@ public class Feedback extends BaseEntity {
     private User user;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "log_id", nullable = false)
-    private Log log;
+    @JoinColumn(name = "branch_id", nullable = false)
+    private Branch branch;
 
     @Column(name = "uuid", columnDefinition = "BINARY(16)", nullable = false, unique = true)
     private UUID uuid;
@@ -38,9 +38,9 @@ public class Feedback extends BaseEntity {
     private String message;
 
     @Builder
-    public Feedback(User user, Log log, String message) {
+    public Feedback(User user, Branch branch, String message) {
         this.user = user;
-        this.log = log;
+        this.branch = branch;
         this.message = message;
         super.isActive = true;
         this.uuid = UUID.randomUUID();

@@ -11,7 +11,7 @@ public class FeedbackCreate {
 
     private final Long userId;
 
-    private final Long logId;
+    private final Long branchId;
 
     private final String message;
 }

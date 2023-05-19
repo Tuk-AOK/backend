@@ -73,4 +73,13 @@ public class BranchController {
         branchService.deleteBranch(uuid);
         return ResponseEntity.ok(ResultResponse.of(DELETE_BRANCH_SUCCESS, ""));
     }
+
+    @GetMapping("/{uuid}/feedbacks")
+    public ResponseEntity<ResultResponse> findFeebacksInBranch(@PathVariable UUID uuid)
+    {
+        List<BranchFeedbackInfo> branchfeedbackInfos = branchService.findFeedbackInfoByUuid(uuid);
+        BranchFeedbackInfoList branchFeedbackInfoList = new BranchFeedbackInfoList();
+        branchFeedbackInfoList.addAllBranchFeedbackInfo(branchfeedbackInfos);
+        return ResponseEntity.ok(ResultResponse.of(READ_BRANCH_FEEDBACK_LIST_SUCCESS, branchFeedbackInfoList));
+    }
 }
