@@ -127,6 +127,7 @@ public class ProjectService {
     private Project convertProjectFromRequest(ProjectCreateRequest projectCreateRequest) {
         return Project.builder()
                 .name(projectCreateRequest.getName())
+                .intro(projectCreateRequest.getIntro())
                 .build();
     }
     private User getUserById(Long userId) {
@@ -141,6 +142,7 @@ public class ProjectService {
         return ProjectInfo.builder()
                 .projectName(project.getName())
                 .projectUuid(project.getUuid())
+                .projectIntro(project.getIntro())
                 .build();
     }
 

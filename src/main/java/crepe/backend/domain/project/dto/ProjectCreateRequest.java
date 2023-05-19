@@ -18,4 +18,6 @@ public class ProjectCreateRequest {
     @NotNull(message = "유저 아이디를 입력해주세요.")
     private final Long userId;
 
+    private final String intro;
+
 }

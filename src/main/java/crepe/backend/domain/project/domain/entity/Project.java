@@ -25,6 +25,9 @@ public class Project extends BaseEntity {
     @Column(name = "name", length = 200, nullable = false)
     private String name;
 
+    @Column(name = "intro", length = 500)
+    private String intro;
+
     @OneToMany(mappedBy = "project")
     private List<UserProject> userProjects = new ArrayList<>();
 
@@ -32,8 +35,9 @@ public class Project extends BaseEntity {
     private List<Branch> branches = new ArrayList<>();
 
     @Builder
-    public Project(String name){
+    public Project(String name, String intro){
         this.name = name;
+        this.intro = intro;
         super.isActive = true;
         this.uuid = UUID.randomUUID();
 

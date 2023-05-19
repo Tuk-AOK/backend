@@ -16,10 +16,12 @@ import java.util.UUID;
 public class ProjectInfo {
     private String projectName;
     private UUID projectUuid;
+    private String projectIntro;
 
     @Builder
-    public ProjectInfo(String projectName, UUID projectUuid) {
+    public ProjectInfo(String projectName, UUID projectUuid, String projectIntro) {
         this.projectName = projectName;
         this.projectUuid = projectUuid;
+        this.projectIntro = projectIntro;
     }
 }
