@@ -3,6 +3,7 @@ package crepe.backend.domain.branch.service;
 import crepe.backend.domain.branch.domain.entity.Branch;
 import crepe.backend.domain.branch.domain.repository.BranchRepository;
 import crepe.backend.domain.branch.dto.*;
+import crepe.backend.domain.branch.mapper.BranchMapper;
 import crepe.backend.domain.feedback.domain.entity.Feedback;
 import crepe.backend.domain.feedback.domain.repository.FeedbackRepository;
 import crepe.backend.domain.log.domain.entity.Layer;
@@ -33,65 +34,32 @@ public class BranchService {
     private final LayerRepository layerRepository;
     private final ResourceRepository resourceRepository;
     private final FeedbackRepository feedbackRepository;
+    private final BranchMapper branchMapper;
 
 
     public BranchCreateInfo branchCreate(BranchCreate createRequest) { // 브랜치를 생성하는 모듈
         Project findProject = projectService.getProjectById(createRequest.getProjectId());
-        Branch branchdata = changeBranchCreateToBranch(createRequest, findProject);
+        Branch branchdata = branchMapper.mapBranchCreateToBranch(createRequest, findProject);
         Branch savedata = branchRepository.save(branchdata);
 
-        return mapBranchEntityToBranchCreateInfo(savedata);
+        return branchMapper.mapBranchEntityToBranchCreateInfo(savedata);
     }
 
     public BranchInfo findBranchInfoByUuId(UUID uuid) { // 특정 브랜치의 정보를 찾을 때 사용하는 모듈
         Branch findBranch = findBranchByUuid(uuid);
-        return mapBranchEntityToBranchInfo(findBranch);
+        return branchMapper.mapBranchEntityToBranchInfo(findBranch);
     }
 
     public BranchLogInfoList findLogInfoByUuid(UUID uuid) { // 해당 브랜치의 모든 로그 정보를 찾는 모듈
         Branch findBranch = findBranchByUuid(uuid);
         List<Log> logs = getLogList(findBranch);
-        return getLogInfoList(logs);
-    }
-
-    private Branch changeBranchCreateToBranch(BranchCreate branchCreate, Project project) { // BranchCreate 타입을 Branch 타입으로 변환하는 모듈
-        return Branch.builder()
-                .project(project)
-                .name(branchCreate.getName())
-                .build();
-    }
-
-    private BranchCreateInfo mapBranchEntityToBranchCreateInfo(Branch savedata) { // Branch 타입을 BranchCreateInfo 타입으로 변환하는 모듈
-        return BranchCreateInfo.builder()
-                .branchUuid(savedata.getUuid())
-                .build();
-    }
-
-    private BranchInfo mapBranchEntityToBranchInfo(Branch branch) // Branch 타입을 BranchInfo 타입으로 변환하는 모듈
-    {
-        return BranchInfo.builder()
-                .branchName(branch.getName())
-                .branchId(branch.getId())
-                .build();
+        return branchMapper.getLogInfoList(logs);
     }
 
     public List<BranchFeedbackInfo> findFeedbackInfoByUuid(UUID branchUuid)
     {
         Branch findBranch = findBranchByUuid(branchUuid);
-        return mapBranchEntityToBranchFeedbackInfos(getFeedbackListByBranch(findBranch));
-    }
-
-    private List<BranchFeedbackInfo> mapBranchEntityToBranchFeedbackInfos(List<Feedback> feedbacks) // Branch 타입을 BranchInfo 타입으로 변환하는 모듈
-    {
-        List<BranchFeedbackInfo> branchFeedbackInfos = new ArrayList<>();
-        for(Feedback feedback: feedbacks) {
-            branchFeedbackInfos.add(BranchFeedbackInfo.builder()
-                    .feedbackMessage(feedback.getMessage())
-                    .feedbackUserUuid(feedback.getUser().getUuid())
-                    .feedbackUuid(feedback.getUuid())
-                    .build());
-        }
-        return branchFeedbackInfos;
+        return branchMapper.mapBranchEntityToBranchFeedbackInfos(getFeedbackListByBranch(findBranch));
     }
 
     private List<Feedback> getFeedbackListByBranch(Branch branch)
@@ -99,20 +67,6 @@ public class BranchService {
         return feedbackRepository.findAllByBranchAndIsActiveTrueOrderByCreatedAtDesc(branch);
     }
 
-    private BranchLogInfoList getLogInfoList(List<Log> logs) // LogInfo들을 LogInfoList로 변환하는 모듈
-    {
-        List<BranchLogInfo> logInfos = new ArrayList<>();
-
-        for(int i = 0; i < logs.size(); i ++)
-        {
-            logInfos.add(BranchLogInfo.builder()
-                    .logUuid(logs.get(i).getUuid())
-                    .logMessage(logs.get(i).getMessage())
-                    .build());
-        }
-
-        return new BranchLogInfoList(logInfos);
-    }
     private Branch findBranchByUuid(UUID uuid) { // 쿼리를 이용해서 UUID를 가지고 브랜치를 찾는 모듈
         return branchRepository.findBranchByUuidAndIsActiveTrue(uuid).orElseThrow(NotFoundBranchEntityException::new);
     }
@@ -151,9 +105,7 @@ public class BranchService {
     public BranchRecentLogInfo findRecentLogInfoByUuid(UUID uuid) {
         Branch branch = findBranchByUuid(uuid);
         Log log = getRecentLogByBranch(branch);
-        return BranchRecentLogInfo.builder()
-                .logUuid(log.getUuid())
-                .build();
+        return branchMapper.mapLogToRecentlogInfo(log);
     }
 
     public List<MergeResourceInfo> getMergeResources(UUID uuid) {
@@ -227,8 +179,8 @@ public class BranchService {
         int index = 0;
         boolean isIn = false;
 
-        List<List<String>> branchFileInfos = getFileInfoList(resources);
-        List<List<String>> mainFileInfos = getFileInfoList(mainResources);
+        List<List<String>> branchFileInfos =branchMapper. getFileInfoList(resources);
+        List<List<String>> mainFileInfos = branchMapper.getFileInfoList(mainResources);
 
         System.out.println("==============================");
         System.out.println("branch: "+branchFileInfos);
@@ -247,7 +199,7 @@ public class BranchService {
             }
             if (isIn) {  // 있으면
                 System.out.println("* Isin:"+isIn);
-                mergeResourceInfos.add(mapMergeResourceInfo(
+                mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
                         branchFileInfos.get(0).get(0), //fileName
                         branchFileInfos.get(0).get(1), //fileLink
                         true,
@@ -257,7 +209,7 @@ public class BranchService {
                 isIn = false;
             } else { // 없으면
                 System.out.println("* Isin:"+isIn);
-                mergeResourceInfos.add(mapMergeResourceInfo(
+                mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
                         branchFileInfos.get(0).get(0),
                         branchFileInfos.get(0).get(1),
                         false,
@@ -282,7 +234,7 @@ public class BranchService {
                 isIn = false;
             } else { // 없으면
                 System.out.println("* Isin:"+isIn);
-                mergeResourceInfos.add(mapMergeResourceInfo(
+                mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
                         mainFileInfos.get(0).get(0),
                         mainFileInfos.get(0).get(1),
                         false,
@@ -295,7 +247,7 @@ public class BranchService {
             System.out.println("data(branch):" + branchFileInfos.get(0).get(0));
 
             for (List<String> branchFileInfo: branchFileInfos) {
-                mergeResourceInfos.add(mapMergeResourceInfo(
+                mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
                         branchFileInfos.get(0).get(0),
                         branchFileInfos.get(0).get(1),
                         false,
@@ -306,7 +258,7 @@ public class BranchService {
         if (!mainFileInfos.isEmpty()) {
             System.out.println("data(main):" + branchFileInfos.get(0).get(0));
             for (List<String> mainFileInfo: mainFileInfos) {
-                mergeResourceInfos.add(mapMergeResourceInfo(
+                mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
                         mainFileInfos.get(0).get(0),
                         mainFileInfos.get(0).get(1),
                         false,
@@ -322,25 +274,5 @@ public class BranchService {
         }
 
         return mergeResourceInfos;
-    }
-
-    private List<List<String>> getFileInfoList(List<Resource> resources) {
-        List<List<String>> fileInfos = new ArrayList<>();
-        for (Resource resource: resources) {
-            fileInfos.add(Arrays.asList(resource.getName(), resource.getLink()));
-        }
-        return fileInfos;
-    }
-
-    private MergeResourceInfo mapMergeResourceInfo(String name,
-                                                   String link,
-                                                   boolean isDuplicated,
-                                                   boolean isNew) {
-        return MergeResourceInfo.builder()
-                .fileName(name)
-                .fileLink(link)
-                .isDuplicated(isDuplicated)
-                .isNew(isNew)
-                .build();
     }
 }

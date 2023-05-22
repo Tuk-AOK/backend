@@ -11,6 +11,7 @@ import crepe.backend.domain.log.domain.repository.LogRepository;
 import crepe.backend.domain.log.domain.repository.ResourceRepository;
 import crepe.backend.domain.log.dto.*;
 import crepe.backend.domain.log.exception.NotFoundLogEntityException;
+import crepe.backend.domain.log.mapper.LogMapper;
 import crepe.backend.domain.project.exception.NotFoundResourceEntity;
 import crepe.backend.domain.user.domain.entity.User;
 import crepe.backend.domain.user.domain.repository.UserRepository;
@@ -33,6 +34,7 @@ public class LogService {
     private final BranchRepository branchRepository;
     private final LayerRepository layerRepository;
     private final ResourceRepository resourceRepository;
+    private final LogMapper logMapper;
 
     public LogUuidInfo createLogUuidInfo(Log log) {
         return LogUuidInfo.builder()
@@ -68,7 +70,7 @@ public class LogService {
                 .userUuid(log.getUser().getUuid())
                 .logMessage(log.getMessage())
                 .logCreatedAt(log.getCreatedAt())
-                .resourceInfos(getResourceInfoList(resources))
+                .resourceInfos(logMapper.getResourceInfoList(resources))
                 .build();
     }
 
@@ -119,17 +121,5 @@ public class LogService {
                 .build();
 
         layerRepository.save(layer);
-    }
-
-    private List<ResourceInfo> getResourceInfoList(List<Resource> resources) {
-        List<ResourceInfo> resourceInfos = new ArrayList<>();
-        for(Resource resource: resources) {
-            resourceInfos.add(ResourceInfo.builder()
-                            .fileName(resource.getName())
-                            .fileLink(resource.getLink())
-                            .fileUuid(resource.getUuid())
-                            .build());
-        }
-        return resourceInfos;
     }
 }
