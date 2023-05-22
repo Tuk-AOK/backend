@@ -39,7 +39,6 @@ public class ProjectService {
         Project newProject = convertProjectFromRequest(projectCreateRequest);
         User foundUser = getUserById(projectCreateRequest.getUserId());
         Project savedProject = projectRepository.save(newProject);
-
         saveUserProject(foundUser, savedProject, true);
         //saveBranch(savedProject, "main");
 
@@ -144,6 +143,7 @@ public class ProjectService {
                 .projectName(project.getName())
                 .projectUuid(project.getUuid())
                 .projectIntro(project.getIntro())
+                .projectPreview(project.getPreview())
                 .build();
     }
 

@@ -17,7 +17,6 @@ public class ProjectInfo {
     private String projectName;
     private UUID projectUuid;
     private String projectIntro;
-
     private String projectPreview;
 
     @Builder
