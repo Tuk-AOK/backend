@@ -12,6 +12,7 @@ import crepe.backend.domain.user.dto.UserCreateInfo;
 import crepe.backend.domain.user.dto.UserInfo;
 import crepe.backend.domain.project.domain.repository.UserProjectRepository;
 import crepe.backend.domain.user.domain.repository.UserRepository;
+import crepe.backend.domain.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,41 +29,28 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserProjectRepository userProjectRepository;
     private final ProjectRepository projectRepository;
+    private final UserMapper userMapper;
 
     // 테스트를 위한 유저 추가와 관련된 코드
     public UserCreateInfo userCreate(UserCreate usercreate) {
-        User userdata = changeUserInfoToUser(usercreate);
+        User userdata = userMapper.mapUserInfoToUser(usercreate);
         User savedata = userRepository.save(userdata);
-        return mapUserEntityToUserCreateInfo(savedata);
-    }
-
-    private User changeUserInfoToUser(UserCreate usercreate) {
-        return User.builder()
-                .email(usercreate.getEmail())
-                .password(usercreate.getPassword())
-                .photo(usercreate.getPhoto())
-                .nickname(usercreate.getNickname())
-                .build();
-    }
-
-    private UserCreateInfo mapUserEntityToUserCreateInfo(User savedUser) {
-        return UserCreateInfo.builder()
-                .userUuid(savedUser.getUuid())
-                .build();
+        return userMapper.mapUserEntityToUserCreateInfo(savedata);
     }
 
     // uuid로 유저 찾기
     public UserInfo findUserInfoById(UUID userUuid) {
         User findUser = findUserByUuId(userUuid);
-        return mapUserEntityToUserInfo(findUser);
+        return userMapper.mapUserEntityToUserInfo(findUser);
     }
 
     // uuid를 이용해서 유저가 포함되어있는 프로젝트 찾는 함수
     public ProjectInfoList findUserProjectById(UUID userUuid)
     {
         User findUser = findUserByUuId(userUuid);
-        List<Project> projects = getProjectList(findUser);
-        return getProjectInfoList(projects);
+        List<UserProject> userProjects = findUserProjectByUser(findUser);
+        List<Project> projects = userMapper.getProjectList(userProjects);
+        return userMapper.getProjectInfoList(projects);
     }
 
     public void updateUserInfo(UUID userUuid, Map<String, String> user)
@@ -79,46 +67,15 @@ public class UserService {
         userRepository.deleteById(user.getId());
     }
 
-    private UserInfo mapUserEntityToUserInfo(User savedUser) {
-        return UserInfo.builder()
-                .userUuid(savedUser.getUuid())
-                .email(savedUser.getEmail())
-                .nickname(savedUser.getNickname())
-                .photo(savedUser.getPhoto())
-                .build();
-    }
-
-    private ProjectInfoList getProjectInfoList(List<Project> projects)
-    {
-        List<ProjectInfo> projectInfos = new ArrayList<>();
-
-        for(int i = 0; i < projects.size(); i ++)
-        {
-            projectInfos.add(ProjectInfo.builder()
-                    .projectName(projects.get(i).getName())
-                    .projectUuid(projects.get(i).getUuid())
-                    .build());
-        }
-
-        return new ProjectInfoList(projectInfos);
-    }
-
     // 해당 uuid의 유저를 얻기 위한 함수
     public User findUserByUuId(UUID userUuid)
     {
         return userRepository.findUserByUuidAndIsActiveTrue(userUuid).orElseThrow(NotFoundUserEntityException::new);
     }
 
-    // 유저가 속해있는 프로젝트 ID를 얻기 위한 함수
-    private List<Project> getProjectList(User user)
+    private List<UserProject> findUserProjectByUser(User user)
     {
-        List<UserProject> userProjects = userProjectRepository.findAllByUserAndIsActiveTrue(user);
-        List<Project> projects = new ArrayList<>();
-
-        for (UserProject userProject: userProjects) {
-            projects.add(userProject.getProject());
-        }
-        return projects;
+        return userProjectRepository.findAllByUserAndIsActiveTrue(user);
     }
 
     public User findUserById(Long userId)
