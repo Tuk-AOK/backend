@@ -3,8 +3,6 @@ package crepe.backend.domain.log.service;
 import crepe.backend.domain.branch.domain.entity.Branch;
 import crepe.backend.domain.branch.domain.repository.BranchRepository;
 import crepe.backend.domain.branch.exception.NotFoundBranchEntityException;
-import crepe.backend.domain.feedback.domain.entity.Feedback;
-import crepe.backend.domain.feedback.domain.repository.FeedbackRepository;
 import crepe.backend.domain.log.domain.entity.Layer;
 import crepe.backend.domain.log.domain.entity.Log;
 import crepe.backend.domain.log.domain.entity.Resource;
@@ -16,8 +14,6 @@ import crepe.backend.domain.log.exception.NotFoundLogEntityException;
 import crepe.backend.domain.project.exception.NotFoundResourceEntity;
 import crepe.backend.domain.user.domain.entity.User;
 import crepe.backend.domain.user.domain.repository.UserRepository;
-import crepe.backend.domain.user.dto.UserInfo;
-import crepe.backend.domain.user.dto.UserInfoList;
 import crepe.backend.domain.user.exception.NotFoundUserEntityException;
 import crepe.backend.global.exception.BusinessException;
 import crepe.backend.global.response.ErrorCode;
@@ -37,7 +33,6 @@ public class LogService {
     private final BranchRepository branchRepository;
     private final LayerRepository layerRepository;
     private final ResourceRepository resourceRepository;
-    private final FeedbackRepository feedbackRepository;
 
     public LogUuidInfo createLogUuidInfo(Log log) {
         return LogUuidInfo.builder()
@@ -69,14 +64,11 @@ public class LogService {
             resources.add(getResourceById(layer.getResource().getId()));
         }
 
-        List<Feedback> feedbacks = feedbackRepository.findAllByLogAndIsActiveTrueOrderByCreatedAtDesc(log);
-
         return LogInfo.builder()
                 .userUuid(log.getUser().getUuid())
                 .logMessage(log.getMessage())
                 .logCreatedAt(log.getCreatedAt())
                 .resourceInfos(getResourceInfoList(resources))
-                .feedbackInfos(getLogFeedbackInfoList(feedbacks))
                 .build();
     }
 
@@ -139,18 +131,5 @@ public class LogService {
                             .build());
         }
         return resourceInfos;
-    }
-
-
-    private List<LogFeedbackInfo> getLogFeedbackInfoList(List<Feedback> feedbacks) {
-        List<LogFeedbackInfo> logFeedbackInfos = new ArrayList<>();
-        for(Feedback feedback: feedbacks) {
-            logFeedbackInfos.add(LogFeedbackInfo.builder()
-                    .feedbackMessage(feedback.getMessage())
-                    .feedbackUserUuid(feedback.getUser().getUuid())
-                    .feedbackUuid(feedback.getUuid())
-                    .build());
-        }
-        return logFeedbackInfos;
     }
 }
