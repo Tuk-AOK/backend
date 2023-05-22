@@ -18,10 +18,13 @@ public class ProjectInfo {
     private UUID projectUuid;
     private String projectIntro;
 
+    private String projectPreview;
+
     @Builder
-    public ProjectInfo(String projectName, UUID projectUuid, String projectIntro) {
+    public ProjectInfo(String projectName, UUID projectUuid, String projectIntro, String projectPreview) {
         this.projectName = projectName;
         this.projectUuid = projectUuid;
         this.projectIntro = projectIntro;
+        this.projectPreview = projectPreview;
     }
 }

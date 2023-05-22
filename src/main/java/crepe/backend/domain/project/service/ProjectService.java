@@ -128,6 +128,7 @@ public class ProjectService {
         return Project.builder()
                 .name(projectCreateRequest.getName())
                 .intro(projectCreateRequest.getIntro())
+                .preview(projectCreateRequest.getPreview())
                 .build();
     }
     private User getUserById(Long userId) {
