@@ -22,7 +22,7 @@ import static crepe.backend.global.response.ResultCode.*;
 @RequiredArgsConstructor
 public class UserController {
 
-    public final UserService userService;
+    private final UserService userService;
 
     // API 테스트를 위한 유저 추가
     @PostMapping
