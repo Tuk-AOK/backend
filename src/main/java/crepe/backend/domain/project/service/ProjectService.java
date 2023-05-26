@@ -12,6 +12,7 @@ import crepe.backend.domain.project.dto.ProjectCreateRequest;
 import crepe.backend.domain.project.dto.ProjectInfo;
 import crepe.backend.domain.project.exception.EventDuplicationUserException;
 import crepe.backend.domain.project.exception.NotFoundProjectEntityException;
+import crepe.backend.domain.project.mapper.ProjectMapper;
 import crepe.backend.domain.user.domain.entity.User;
 import crepe.backend.domain.user.domain.repository.UserRepository;
 import crepe.backend.domain.user.dto.UserInfo;
@@ -34,15 +35,19 @@ public class ProjectService {
     private final UserRepository userRepository;
     private final BranchRepository branchRepository;
     private final UserProjectRepository userProjectRepository;
+    private final ProjectMapper projectMapper;
 
     public ProjectInfo createProject(ProjectCreateRequest projectCreateRequest) {
-        Project newProject = convertProjectFromRequest(projectCreateRequest);
+        Project newProject = projectMapper.convertProjectFromRequest(projectCreateRequest);
         User foundUser = getUserById(projectCreateRequest.getUserId());
         Project savedProject = projectRepository.save(newProject);
-        saveUserProject(foundUser, savedProject, true);
+
+
+        UserProject userProject = projectMapper.mapUserProject(foundUser, savedProject, true);
+        userProjectRepository.save(userProject);
         //saveBranch(savedProject, "main");
 
-        return mapProjectEntityToProjectInfoResponse(savedProject);
+        return projectMapper.mapProjectEntityToProjectInfoResponse(savedProject);
     }
 
     public void createUserProject(Long userId, Long projectId) {
@@ -58,16 +63,8 @@ public class ProjectService {
             }
         }
 
-        saveUserProject(getUserById(userId), getProjectById(projectId), false);
-    }
-
-
-    private void saveUserProject(User user, Project project, boolean isAdmin) {
-        userProjectRepository.save(UserProject.builder()
-                .user(user)
-                .project(project)
-                .isAdmin(isAdmin)
-                .build());
+        UserProject userProject = projectMapper.mapUserProject(getUserById(userId), getProjectById(projectId), false);
+        userProjectRepository.save(userProject);
     }
 
     private void saveBranch(Project project,String name) {
@@ -79,57 +76,19 @@ public class ProjectService {
 
     public ProjectInfo findProjectInfoByUuid(UUID uuid) {
         Project foundProject = findProjectByUuid(uuid);
-        return mapProjectEntityToProjectInfoResponse(foundProject);
+        return projectMapper.mapProjectEntityToProjectInfoResponse(foundProject);
     }
 
     public ProjectBranchInfoList findAllBranchInfoByUuid(UUID uuid) {
         List<Branch> branches = branchRepository.findAllByProjectAndIsActiveTrue(findProjectByUuid(uuid));
-        return getProjectBranchInfoList(branches);
+        return projectMapper.getProjectBranchInfoList(branches);
     }
 
     public UserInfoList findAllUserInfoByUuid(UUID uuid) {
         List<UserProject> userProjects = userProjectRepository.findAllByProjectAndIsActiveTrue(findProjectByUuid(uuid));
-        return getUserInfoList(getUserList(userProjects));
+        return projectMapper.getUserInfoList(projectMapper.getUserList(userProjects));
     }
 
-    private List<User> getUserList(List<UserProject> userProjects) {
-        List<User> users = new ArrayList<>();
-
-        for(int i = 0; i < userProjects.size(); i++) {
-            users.add(userProjects.get(i).getUser());
-        }
-        return users;
-    }
-
-    private UserInfoList getUserInfoList(List<User> users) {
-        List<UserInfo> userInfos = new ArrayList<>();
-        for(int i = 0; i < users.size(); i++) {
-            userInfos.add(UserInfo.builder()
-                    .userUuid(users.get(i).getUuid())
-                    .email(users.get(i).getEmail())
-                    .nickname(users.get(i).getNickname())
-                    .photo(users.get(i).getPhoto())
-                    .build());
-        }
-        return new UserInfoList(userInfos);
-    }
-    private ProjectBranchInfoList getProjectBranchInfoList(List<Branch> branches) {
-        List<ProjectBranchInfo> projectBranchInfos = new ArrayList<>();
-        for(int i = 0; i < branches.size(); i++) {
-            projectBranchInfos.add(ProjectBranchInfo.builder()
-                    .branchName(branches.get(i).getName())
-                    .branchUuid(branches.get(i).getUuid())
-                    .build());
-        }
-        return new ProjectBranchInfoList(projectBranchInfos);
-    }
-    private Project convertProjectFromRequest(ProjectCreateRequest projectCreateRequest) {
-        return Project.builder()
-                .name(projectCreateRequest.getName())
-                .intro(projectCreateRequest.getIntro())
-                .preview(projectCreateRequest.getPreview())
-                .build();
-    }
     private User getUserById(Long userId) {
         return userRepository.findUserByIdAndIsActiveTrue(userId).orElseThrow(NotFoundUserEntityException::new);
     }
@@ -138,14 +97,6 @@ public class ProjectService {
         return projectRepository.findProjectByIdAndIsActiveTrue(projectId).orElseThrow(NotFoundProjectEntityException::new);
     }
 
-    private ProjectInfo mapProjectEntityToProjectInfoResponse(Project project) {
-        return ProjectInfo.builder()
-                .projectName(project.getName())
-                .projectUuid(project.getUuid())
-                .projectIntro(project.getIntro())
-                .projectPreview(project.getPreview())
-                .build();
-    }
 
     private Project findProjectByUuid(UUID uuid) {
         return projectRepository.findProjectByUuidAndIsActiveTrue(uuid).orElseThrow(NotFoundProjectEntityException::new);
