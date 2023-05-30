@@ -97,6 +97,7 @@ public class ProjectService {
         return projectRepository.findProjectByIdAndIsActiveTrue(projectId).orElseThrow(NotFoundProjectEntityException::new);
     }
 
+
     private Project findProjectByUuid(UUID uuid) {
         return projectRepository.findProjectByUuidAndIsActiveTrue(uuid).orElseThrow(NotFoundProjectEntityException::new);
     }

@@ -6,35 +6,35 @@ services:
     image: mysql
     restart: on-failure
     environment:
-      MYSQL_DATABASE: crepedb
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_HOST: '%'
-      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       TZ: 'Asia/Seoul'
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - data_mysql:/var/lib/mysql
-    networks:
-      - app-tier
+#    networks:
+#      - app-tier
     tty: true
 
-  backend:
-    container_name: crepe-backend
-    build:
-      context: ./
-    command: gradle bootRun
-    ports:
-      - "8080:8080"
-    networks:
-      - app-tier
-    depends_on:
-      - database
-    restart: on-failure
-    tty: true
+#  backend:
+#    container_name: crepe-backend
+#    build:
+#      context: ./
+#    command: gradle bootRun
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - app-tier
+#    depends_on:
+#      - database
+#    restart: on-failure
+#    tty: true
 
-networks:
-  app-tier:
-    driver: bridge
+#networks:
+#  app-tier:
+#    driver: bridge
 
 volumes:
   data_mysql: null

@@ -20,4 +20,6 @@ public class ProjectCreateRequest {
 
     private final String intro;
 
+    private final String preview;
+
 }
