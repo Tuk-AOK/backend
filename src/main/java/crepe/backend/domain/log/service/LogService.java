@@ -12,6 +12,8 @@ import crepe.backend.domain.log.domain.repository.ResourceRepository;
 import crepe.backend.domain.log.dto.*;
 import crepe.backend.domain.log.exception.NotFoundLogEntityException;
 import crepe.backend.domain.log.mapper.LogMapper;
+import crepe.backend.domain.project.domain.entity.Project;
+import crepe.backend.domain.project.domain.repository.ProjectRepository;
 import crepe.backend.domain.project.exception.NotFoundResourceEntity;
 import crepe.backend.domain.user.domain.entity.User;
 import crepe.backend.domain.user.domain.repository.UserRepository;
@@ -34,6 +36,8 @@ public class LogService {
     private final BranchRepository branchRepository;
     private final LayerRepository layerRepository;
     private final ResourceRepository resourceRepository;
+    private final ProjectRepository projectRepository;
+
     private final LogMapper logMapper;
 
     public LogUuidInfo createLogUuidInfo(Log log) {
@@ -54,7 +58,11 @@ public class LogService {
             throw new BusinessException(ErrorCode.LOG_CREATE_ERROR);
         }
     }
-
+    public void updatePreview(Log log, String preview){
+        Project project = log.getBranch().getProject();
+        project.updatePreview(preview);
+        projectRepository.save(project);
+    }
     public LogInfo findLogInfoByUuid(UUID uuid){
         //레이어 전부 읽어서
         Log log = getLogByUuid(uuid);

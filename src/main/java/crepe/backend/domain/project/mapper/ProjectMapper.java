@@ -3,10 +3,7 @@ package crepe.backend.domain.project.mapper;
 import crepe.backend.domain.branch.domain.entity.Branch;
 import crepe.backend.domain.project.domain.entity.Project;
 import crepe.backend.domain.project.domain.entity.UserProject;
-import crepe.backend.domain.project.dto.ProjectBranchInfo;
-import crepe.backend.domain.project.dto.ProjectBranchInfoList;
-import crepe.backend.domain.project.dto.ProjectCreateRequest;
-import crepe.backend.domain.project.dto.ProjectInfo;
+import crepe.backend.domain.project.dto.*;
 import crepe.backend.domain.user.domain.entity.User;
 import crepe.backend.domain.user.dto.UserInfo;
 import crepe.backend.domain.user.dto.UserInfoList;
@@ -42,10 +39,11 @@ public class ProjectMapper {
 
     public ProjectBranchInfoList getProjectBranchInfoList(List<Branch> branches) {
         List<ProjectBranchInfo> projectBranchInfos = new ArrayList<>();
-        for(int i = 0; i < branches.size(); i++) {
+        for(Branch branch: branches) {
             projectBranchInfos.add(ProjectBranchInfo.builder()
-                    .branchName(branches.get(i).getName())
-                    .branchUuid(branches.get(i).getUuid())
+                    .branchId(branch.getId())
+                    .branchUuid(branch.getUuid())
+                    .branchName(branch.getName())
                     .build());
         }
         return new ProjectBranchInfoList(projectBranchInfos);
@@ -53,8 +51,8 @@ public class ProjectMapper {
 
     public Project convertProjectFromRequest(ProjectCreateRequest projectCreateRequest) {
         return Project.builder()
-                .name(projectCreateRequest.getName())
-                .intro(projectCreateRequest.getIntro())
+                .name(projectCreateRequest.getProjectName())
+                .intro(projectCreateRequest.getProjectIntro())
                 .build();
     }
 
@@ -63,15 +61,40 @@ public class ProjectMapper {
                 .projectName(project.getName())
                 .projectUuid(project.getUuid())
                 .projectIntro(project.getIntro())
+                .projectPreview(project.getPreview())
+                .projectCreatedAt(project.getCreatedAt())
+                .projectUpdatedAt(project.getUpdatedAt())
                 .build();
     }
 
     public List<User> getUserList(List<UserProject> userProjects) {
         List<User> users = new ArrayList<>();
 
-        for(int i = 0; i < userProjects.size(); i++) {
-            users.add(userProjects.get(i).getUser());
+        for(UserProject userProject: userProjects) {
+            users.add(userProject.getUser());
         }
         return users;
+    }
+
+    public ProjectInfoList getProjectInfoList(List<Project> projects)
+    {
+        List<ProjectInfo> projectInfos = new ArrayList<>();
+
+        for(Project project: projects)
+        {
+            projectInfos.add(mapProjectEntityToProjectInfoResponse(project));
+        }
+
+        return new ProjectInfoList(projectInfos);
+    }
+
+    public List<Project> getProjectList(List<UserProject> userProjects) // 유저가 속해있는 프로젝트 ID를 얻기 위한 함수
+    {
+        List<Project> projects = new ArrayList<>();
+
+        for (UserProject userProject: userProjects) {
+            projects.add(userProject.getProject());
+        }
+        return projects;
     }
 }

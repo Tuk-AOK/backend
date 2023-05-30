@@ -1,17 +1,15 @@
 package crepe.backend.domain.log.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
-import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 
+@Getter
 @Builder
-@Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class LogCreateRequest {
 
@@ -19,5 +17,5 @@ public class LogCreateRequest {
     private Long userId;
     private Long branchId;
     private String message;
-
+    private MultipartFile preview;
 }

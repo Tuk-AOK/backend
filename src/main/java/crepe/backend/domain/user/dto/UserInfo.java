@@ -1,13 +1,13 @@
 package crepe.backend.domain.user.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
 @Getter
-@NoArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class UserInfo {
 
     private UUID userUuid;
@@ -17,13 +17,4 @@ public class UserInfo {
     private String nickname;
 
     private String photo;
-
-    @Builder
-    public UserInfo(UUID userUuid, String email, String nickname, String photo)
-    {
-        this.userUuid = userUuid;
-        this.email = email;
-        this.nickname = nickname;
-        this.photo = photo;
-    }
 }

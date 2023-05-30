@@ -1,17 +1,14 @@
 package crepe.backend.domain.log.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
 @Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-@NoArgsConstructor
 public class LogInfoList {
 
     List<LogInfo> logs = new ArrayList<>();

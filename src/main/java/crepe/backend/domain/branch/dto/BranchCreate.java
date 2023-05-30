@@ -1,15 +1,14 @@
 package crepe.backend.domain.branch.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
-@Builder
-@RequiredArgsConstructor
 @Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class BranchCreate {
 
-    private final String name;
+    private String name;
 
-    private final Long projectId;
+    private Long projectId;
 }

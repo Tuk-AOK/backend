@@ -39,30 +39,4 @@ public class UserMapper {
                 .photo(savedUser.getPhoto())
                 .build();
     }
-
-    public ProjectInfoList getProjectInfoList(List<Project> projects)
-    {
-        List<ProjectInfo> projectInfos = new ArrayList<>();
-
-        for(int i = 0; i < projects.size(); i ++)
-        {
-            projectInfos.add(ProjectInfo.builder()
-                    .projectName(projects.get(i).getName())
-                    .projectUuid(projects.get(i).getUuid())
-                    .projectIntro(projects.get(i).getIntro())
-                    .build());
-        }
-
-        return new ProjectInfoList(projectInfos);
-    }
-
-    public List<Project> getProjectList(List<UserProject> userProjects) // 유저가 속해있는 프로젝트 ID를 얻기 위한 함수
-    {
-        List<Project> projects = new ArrayList<>();
-
-        for (UserProject userProject: userProjects) {
-            projects.add(userProject.getProject());
-        }
-        return projects;
-    }
 }

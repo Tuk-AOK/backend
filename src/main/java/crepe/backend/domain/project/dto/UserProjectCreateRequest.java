@@ -1,16 +1,15 @@
 package crepe.backend.domain.project.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 
-@Builder
 @Getter
-@RequiredArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class UserProjectCreateRequest {
 
-    private final Long projectId;
-    private final Long userId;
+    private Long projectId;
+    private Long userId;
 }

@@ -14,8 +14,9 @@ import crepe.backend.domain.log.domain.repository.LogRepository;
 
 import crepe.backend.domain.log.domain.repository.ResourceRepository;
 import crepe.backend.domain.project.domain.entity.Project;
+import crepe.backend.domain.project.domain.repository.ProjectRepository;
+import crepe.backend.domain.project.exception.NotFoundProjectEntityException;
 import crepe.backend.domain.project.exception.NotFoundResourceEntity;
-import crepe.backend.domain.project.service.ProjectService;
 import crepe.backend.domain.branch.exception.NotFoundBranchEntityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,7 +30,7 @@ import java.util.*;
 public class BranchService {
 
     private final BranchRepository branchRepository;
-    private final ProjectService projectService;
+    private final ProjectRepository projectRepository;
     private final LogRepository logRepository;
     private final LayerRepository layerRepository;
     private final ResourceRepository resourceRepository;
@@ -38,12 +39,16 @@ public class BranchService {
 
 
     public BranchCreateInfo branchCreate(BranchCreate createRequest) { // 브랜치를 생성하는 모듈
-        Project findProject = projectService.getProjectById(createRequest.getProjectId());
+        Project findProject = getProjectById(createRequest.getProjectId());
         Branch branchdata = branchMapper.mapBranchCreateToBranch(createRequest, findProject);
         Branch savedata = branchRepository.save(branchdata);
 
         return branchMapper.mapBranchEntityToBranchCreateInfo(savedata);
     }
+    private Project getProjectById(Long projectId) {
+        return projectRepository.findProjectByIdAndIsActiveTrue(projectId).orElseThrow(NotFoundProjectEntityException::new);
+    }
+
 
     public BranchInfo findBranchInfoByUuId(UUID uuid) { // 특정 브랜치의 정보를 찾을 때 사용하는 모듈
         Branch findBranch = findBranchByUuid(uuid);
@@ -113,45 +118,17 @@ public class BranchService {
         Branch branch = getBranchByUuid(uuid);
         //메인브랜치는 삭제 될 일 없으니 0번 받아옴
         Branch mainBranch = branch.getProject().getBranches().get(0);
-        System.out.println("==============================");
-        System.out.println("<branch>");
-        System.out.println(branch.getName());
-        System.out.println("------------------------------");
-        System.out.println(mainBranch.getName());
 
         // isActive 상태의 가장 최신 로그
         Log log = getRecentLogByBranch(branch);
         Log mainLog = getRecentLogByBranch(mainBranch);
-        System.out.println("==============================");
-        System.out.println("<log>");
-        System.out.println(log.getMessage());
-        System.out.println("------------------------------");
-        System.out.println(mainLog.getMessage());
 
         // 정렬된 모든 레이어 받아옴
         List<Layer> layers = layerRepository.findAllByLogAndIsActiveTrueOrderBySequence(log);
         List<Layer> mainLayers = layerRepository.findAllByLogAndIsActiveTrueOrderBySequence(mainLog);
-        System.out.println("==============================");
-        System.out.println("<layer>");
-        for(Layer layer: layers){
-            System.out.println(layer.getResource().getName());
-        }
-        System.out.println("------------------------------");
-        for(Layer layer: mainLayers){
-            System.out.println(layer.getResource().getName());
-        }
 
         List<Resource> resources = getResourcesByLayer(layers);
         List<Resource> mainResources = getResourcesByLayer(mainLayers);
-        System.out.println("==============================");
-        System.out.println("<resource>");
-        for(Resource resource: resources){
-            System.out.println(resource.getName());
-        }
-        System.out.println("------------------------------");
-        for(Resource resource: mainResources){
-            System.out.println(resource.getName());
-        }
 
         return getMergeResourceInfoList(resources, mainResources);
     }
@@ -182,14 +159,10 @@ public class BranchService {
         List<List<String>> branchFileInfos =branchMapper. getFileInfoList(resources);
         List<List<String>> mainFileInfos = branchMapper.getFileInfoList(mainResources);
 
-        System.out.println("==============================");
-        System.out.println("branch: "+branchFileInfos);
-        System.out.println("main: "+mainFileInfos);
 
         while ((!branchFileInfos.isEmpty()) &&(!mainFileInfos.isEmpty())) {
             // 브랜치의 0번 요소 가져오기
             String currData = branchFileInfos.get(0).get(0);
-            System.out.println("data(branch):"+currData);
             // 메인에 해당 파일이 있는지 검사
             for (List<String> mainFileInfo: mainFileInfos) {
                 if (mainFileInfo.contains(currData)) {
@@ -198,7 +171,6 @@ public class BranchService {
                 }
             }
             if (isIn) {  // 있으면
-                System.out.println("* Isin:"+isIn);
                 mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
                         branchFileInfos.get(0).get(0), //fileName
                         branchFileInfos.get(0).get(1), //fileLink
@@ -208,7 +180,6 @@ public class BranchService {
                 mainFileInfos.remove(index);
                 isIn = false;
             } else { // 없으면
-                System.out.println("* Isin:"+isIn);
                 mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
                         branchFileInfos.get(0).get(0),
                         branchFileInfos.get(0).get(1),
@@ -221,7 +192,6 @@ public class BranchService {
                 break;
             }
             currData = mainFileInfos.get(0).get(0);
-            System.out.println("data(main):"+currData);
             // 브랜치에 해당 파일이 있는지 검사
             for (List<String> branchFileInfo: branchFileInfos) {
                 if (branchFileInfo.contains(currData)) {
@@ -230,10 +200,8 @@ public class BranchService {
                 }
             }
             if (isIn) {  // 있으면
-                System.out.println("* Isin:"+isIn);
                 isIn = false;
             } else { // 없으면
-                System.out.println("* Isin:"+isIn);
                 mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
                         mainFileInfos.get(0).get(0),
                         mainFileInfos.get(0).get(1),
@@ -244,7 +212,6 @@ public class BranchService {
         }
         // 브랜치에 리소스 요소가 남은 경우
         if (!branchFileInfos.isEmpty()) {
-            System.out.println("data(branch):" + branchFileInfos.get(0).get(0));
 
             for (List<String> branchFileInfo: branchFileInfos) {
                 mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
@@ -256,7 +223,6 @@ public class BranchService {
         }
 
         if (!mainFileInfos.isEmpty()) {
-            System.out.println("data(main):" + branchFileInfos.get(0).get(0));
             for (List<String> mainFileInfo: mainFileInfos) {
                 mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
                         mainFileInfos.get(0).get(0),
@@ -264,13 +230,6 @@ public class BranchService {
                         false,
                         false));
             }
-        }
-
-        System.out.println("==============================");
-        System.out.println("<mergeResourceInfo>");
-        for (MergeResourceInfo mergeResourceInfo: mergeResourceInfos){
-            System.out.println(mergeResourceInfo.getFileName());
-            System.out.println(mergeResourceInfo.getFileLink());
         }
 
         return mergeResourceInfos;
