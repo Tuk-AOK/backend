@@ -113,45 +113,17 @@ public class BranchService {
         Branch branch = getBranchByUuid(uuid);
         //메인브랜치는 삭제 될 일 없으니 0번 받아옴
         Branch mainBranch = branch.getProject().getBranches().get(0);
-        System.out.println("==============================");
-        System.out.println("<branch>");
-        System.out.println(branch.getName());
-        System.out.println("------------------------------");
-        System.out.println(mainBranch.getName());
 
         // isActive 상태의 가장 최신 로그
         Log log = getRecentLogByBranch(branch);
         Log mainLog = getRecentLogByBranch(mainBranch);
-        System.out.println("==============================");
-        System.out.println("<log>");
-        System.out.println(log.getMessage());
-        System.out.println("------------------------------");
-        System.out.println(mainLog.getMessage());
 
         // 정렬된 모든 레이어 받아옴
         List<Layer> layers = layerRepository.findAllByLogAndIsActiveTrueOrderBySequence(log);
         List<Layer> mainLayers = layerRepository.findAllByLogAndIsActiveTrueOrderBySequence(mainLog);
-        System.out.println("==============================");
-        System.out.println("<layer>");
-        for(Layer layer: layers){
-            System.out.println(layer.getResource().getName());
-        }
-        System.out.println("------------------------------");
-        for(Layer layer: mainLayers){
-            System.out.println(layer.getResource().getName());
-        }
 
         List<Resource> resources = getResourcesByLayer(layers);
         List<Resource> mainResources = getResourcesByLayer(mainLayers);
-        System.out.println("==============================");
-        System.out.println("<resource>");
-        for(Resource resource: resources){
-            System.out.println(resource.getName());
-        }
-        System.out.println("------------------------------");
-        for(Resource resource: mainResources){
-            System.out.println(resource.getName());
-        }
 
         return getMergeResourceInfoList(resources, mainResources);
     }
