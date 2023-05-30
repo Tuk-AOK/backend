@@ -182,14 +182,10 @@ public class BranchService {
         List<List<String>> branchFileInfos =branchMapper. getFileInfoList(resources);
         List<List<String>> mainFileInfos = branchMapper.getFileInfoList(mainResources);
 
-        System.out.println("==============================");
-        System.out.println("branch: "+branchFileInfos);
-        System.out.println("main: "+mainFileInfos);
 
         while ((!branchFileInfos.isEmpty()) &&(!mainFileInfos.isEmpty())) {
             // 브랜치의 0번 요소 가져오기
             String currData = branchFileInfos.get(0).get(0);
-            System.out.println("data(branch):"+currData);
             // 메인에 해당 파일이 있는지 검사
             for (List<String> mainFileInfo: mainFileInfos) {
                 if (mainFileInfo.contains(currData)) {
@@ -198,7 +194,6 @@ public class BranchService {
                 }
             }
             if (isIn) {  // 있으면
-                System.out.println("* Isin:"+isIn);
                 mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
                         branchFileInfos.get(0).get(0), //fileName
                         branchFileInfos.get(0).get(1), //fileLink
@@ -208,7 +203,6 @@ public class BranchService {
                 mainFileInfos.remove(index);
                 isIn = false;
             } else { // 없으면
-                System.out.println("* Isin:"+isIn);
                 mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
                         branchFileInfos.get(0).get(0),
                         branchFileInfos.get(0).get(1),
@@ -221,7 +215,6 @@ public class BranchService {
                 break;
             }
             currData = mainFileInfos.get(0).get(0);
-            System.out.println("data(main):"+currData);
             // 브랜치에 해당 파일이 있는지 검사
             for (List<String> branchFileInfo: branchFileInfos) {
                 if (branchFileInfo.contains(currData)) {
@@ -230,10 +223,8 @@ public class BranchService {
                 }
             }
             if (isIn) {  // 있으면
-                System.out.println("* Isin:"+isIn);
                 isIn = false;
             } else { // 없으면
-                System.out.println("* Isin:"+isIn);
                 mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
                         mainFileInfos.get(0).get(0),
                         mainFileInfos.get(0).get(1),
@@ -244,7 +235,6 @@ public class BranchService {
         }
         // 브랜치에 리소스 요소가 남은 경우
         if (!branchFileInfos.isEmpty()) {
-            System.out.println("data(branch):" + branchFileInfos.get(0).get(0));
 
             for (List<String> branchFileInfo: branchFileInfos) {
                 mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
@@ -256,7 +246,6 @@ public class BranchService {
         }
 
         if (!mainFileInfos.isEmpty()) {
-            System.out.println("data(main):" + branchFileInfos.get(0).get(0));
             for (List<String> mainFileInfo: mainFileInfos) {
                 mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
                         mainFileInfos.get(0).get(0),
@@ -264,13 +253,6 @@ public class BranchService {
                         false,
                         false));
             }
-        }
-
-        System.out.println("==============================");
-        System.out.println("<mergeResourceInfo>");
-        for (MergeResourceInfo mergeResourceInfo: mergeResourceInfos){
-            System.out.println(mergeResourceInfo.getFileName());
-            System.out.println(mergeResourceInfo.getFileLink());
         }
 
         return mergeResourceInfos;
