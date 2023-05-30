@@ -28,6 +28,9 @@ public class Project extends BaseEntity {
     @Column(name = "intro", length = 500)
     private String intro;
 
+    @Column(name = "preview", length = 200)
+    private String preview;
+
     @OneToMany(mappedBy = "project")
     private List<UserProject> userProjects = new ArrayList<>();
 
@@ -35,16 +38,16 @@ public class Project extends BaseEntity {
     private List<Branch> branches = new ArrayList<>();
 
     @Builder
-    public Project(String name, String intro){
+    public Project(String name, String intro, String preview){
         this.name = name;
         this.intro = intro;
+        this.preview = preview;
         super.isActive = true;
         this.uuid = UUID.randomUUID();
 
     }
 
-    public interface ProjectInfoMapping // 프로젝트 아이디만 가져오기 위한 인터페이스 셍성
-    {
+    public interface ProjectInfoMapping { // 프로젝트 아이디만 가져오기 위한 인터페이스 셍성
         Long getId();
     }
 }
