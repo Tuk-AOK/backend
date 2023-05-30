@@ -70,8 +70,8 @@ public class ProjectMapper {
     public List<User> getUserList(List<UserProject> userProjects) {
         List<User> users = new ArrayList<>();
 
-        for(int i = 0; i < userProjects.size(); i++) {
-            users.add(userProjects.get(i).getUser());
+        for(UserProject userProject: userProjects) {
+            users.add(userProject.getUser());
         }
         return users;
     }
