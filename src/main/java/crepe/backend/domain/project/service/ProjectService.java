@@ -4,12 +4,9 @@ package crepe.backend.domain.project.service;
 import crepe.backend.domain.branch.domain.entity.Branch;
 import crepe.backend.domain.branch.domain.repository.BranchRepository;
 import crepe.backend.domain.branch.dto.BranchInfo;
-import crepe.backend.domain.project.dto.ProjectBranchInfoList;
-import crepe.backend.domain.project.dto.ProjectBranchInfo;
+import crepe.backend.domain.project.dto.*;
 import crepe.backend.domain.project.domain.entity.Project;
 import crepe.backend.domain.project.domain.repository.ProjectRepository;
-import crepe.backend.domain.project.dto.ProjectCreateRequest;
-import crepe.backend.domain.project.dto.ProjectInfo;
 import crepe.backend.domain.project.exception.EventDuplicationUserException;
 import crepe.backend.domain.project.exception.NotFoundProjectEntityException;
 import crepe.backend.domain.project.mapper.ProjectMapper;
@@ -39,25 +36,31 @@ public class ProjectService {
 
     public ProjectInfo createProject(ProjectCreateRequest projectCreateRequest) {
         Project newProject = projectMapper.convertProjectFromRequest(projectCreateRequest);
-        User foundUser = getUserById(projectCreateRequest.getUserId());
+        User foundUser = getUserById(projectCreateRequest.getProjectUserId());
         Project savedProject = projectRepository.save(newProject);
 
 
         UserProject userProject = projectMapper.mapUserProject(foundUser, savedProject, true);
         userProjectRepository.save(userProject);
-        //saveBranch(savedProject, "main");
+        saveBranch(savedProject, "main");
 
         return projectMapper.mapProjectEntityToProjectInfoResponse(savedProject);
     }
+    public void updateProjectPreviewByUuid(UUID uuid, String fileName){
+        Project foundProject = getProjectByUuid(uuid);
+        foundProject.updatePreview(fileName);
+        projectRepository.save(foundProject);
+    }
+
 
     public void createUserProject(Long userId, Long projectId) {
 
         Project project = getProjectById(projectId);
         List<UserProject> userProjects = getUserProject(project);
 
-        for(int i = 0; i < userProjects.size(); i ++)
+        for(UserProject userProject: userProjects)
         {
-            if(userProjects.get(i).getUser().getId() == userId)
+            if(userProject.getUser().getId() == userId)
             {
                 throw new EventDuplicationUserException();
             }
@@ -67,12 +70,26 @@ public class ProjectService {
         userProjectRepository.save(userProject);
     }
 
+
+    public ProjectInfoList findUserProjectById(UUID uuid) {
+        User foundUser = findUserByUuid(uuid);
+        List<UserProject> userProjects = foundUser.getUserProjects();
+        List<Project> projects = projectMapper.getProjectList(userProjects);
+        return projectMapper.getProjectInfoList(projects);
+    }
+
+    public User findUserByUuid(UUID uuid)
+    {
+        return userRepository.findUserByUuidAndIsActiveTrue(uuid).orElseThrow(NotFoundUserEntityException::new);
+    }
+
     private void saveBranch(Project project,String name) {
         branchRepository.save(Branch.builder()
                 .project(project)
                 .name(name)
                 .build());
     }
+
 
     public ProjectInfo findProjectInfoByUuid(UUID uuid) {
         Project foundProject = findProjectByUuid(uuid);
@@ -93,8 +110,12 @@ public class ProjectService {
         return userRepository.findUserByIdAndIsActiveTrue(userId).orElseThrow(NotFoundUserEntityException::new);
     }
 
-    public Project getProjectById(Long projectId) {
+    private Project getProjectById(Long projectId) {
         return projectRepository.findProjectByIdAndIsActiveTrue(projectId).orElseThrow(NotFoundProjectEntityException::new);
+    }
+
+    private Project getProjectByUuid(UUID uuid) {
+        return projectRepository.findProjectByUuidAndIsActiveTrue(uuid).orElseThrow(NotFoundProjectEntityException::new);
     }
 
 

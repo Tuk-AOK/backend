@@ -1,19 +1,21 @@
 
 package crepe.backend.domain.project.controller;
 
-import crepe.backend.domain.project.dto.ProjectBranchInfoList;
-import crepe.backend.domain.project.dto.ProjectCreateRequest;
-import crepe.backend.domain.project.dto.ProjectInfo;
-import crepe.backend.domain.project.dto.UserProjectCreateRequest;
+import crepe.backend.domain.project.domain.entity.Project;
+import crepe.backend.domain.project.dto.*;
 import crepe.backend.domain.project.service.ProjectService;
 import crepe.backend.domain.user.dto.UserInfoList;
 import crepe.backend.global.response.ResultCode;
 import crepe.backend.global.response.ResultResponse;
+import crepe.backend.global.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RequestMapping("/api/v1/projects")
@@ -21,6 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProjectController {
     private final ProjectService projectService;
+    private final S3Service s3Service;
 
     @PostMapping
     public ResponseEntity<ResultResponse> createProject(
@@ -29,10 +32,27 @@ public class ProjectController {
         return ResponseEntity.ok(ResultResponse.of(ResultCode.CREATE_PROJECT_SUCCESS, projectInfo));
     }
 
+    @GetMapping
+    public ResponseEntity<ResultResponse> findAllProject(
+            @Valid @RequestParam(required = false)Optional<UUID> userUuid) {
+        ProjectInfoList projectInfoList = projectService.findUserProjectById(userUuid.orElse(null));
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.READ_ALL_USER_PROJECT_SUCCESS, projectInfoList));
+    }
+
     @GetMapping("/{uuid}")
     public ResponseEntity<ResultResponse> findProjectByUuid(@PathVariable UUID uuid) {
         ProjectInfo projectInfo = projectService.findProjectInfoByUuid(uuid);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.READ_ONE_PROJECT_SUCCESS, projectInfo));
+    }
+
+    @PatchMapping("/{uuid}/preview")
+    public ResponseEntity<ResultResponse> updateProjectPreviewByUuid(
+            @PathVariable UUID uuid,
+            @Valid @RequestPart(required = true)MultipartFile projectPreview) {
+
+        String fileName = s3Service.uploadFile(projectPreview);
+        projectService.updateProjectPreviewByUuid(uuid, fileName);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.UPDATE_PROJECT_PREVIEW_SUCCESS,""));
     }
 
     @GetMapping("/{uuid}/branches")

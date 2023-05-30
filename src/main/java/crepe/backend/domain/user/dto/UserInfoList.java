@@ -1,18 +1,15 @@
 package crepe.backend.domain.user.dto;
 
 import crepe.backend.domain.branch.dto.BranchInfo;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
 @Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-@NoArgsConstructor
 public class UserInfoList {
 
     private List<UserInfo> userInfos = new ArrayList<>();

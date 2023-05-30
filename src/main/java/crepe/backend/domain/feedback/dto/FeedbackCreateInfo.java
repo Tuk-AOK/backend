@@ -1,20 +1,14 @@
 package crepe.backend.domain.feedback.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
 @Getter
-@RequiredArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class FeedbackCreateInfo {
-
     private UUID feedbackUuid;
 
-    @Builder
-    public FeedbackCreateInfo(UUID feedbackUuid)
-    {
-        this.feedbackUuid = feedbackUuid;
-    }
 }

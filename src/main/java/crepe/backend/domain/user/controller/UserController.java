@@ -41,14 +41,6 @@ public class UserController {
         return ResponseEntity.ok(ResultResponse.of(READ_ONE_USER_SUCCESS, userInfo));
     }
 
-    // UUID를 이용해서 해당 유저가 가지고 있는 프로젝트 가져오기
-    @GetMapping("/{uuid}/projects")
-    public ResponseEntity<ResultResponse> findByUserProjectById(@PathVariable UUID uuid, @RequestParam("page") int page)
-    {
-        ProjectInfoList projectList = userService.findUserProjectById(uuid, page);
-        return ResponseEntity.ok(ResultResponse.of(READ_ALL_USER_PROJECT_SUCCESS, projectList));
-    }
-
     @PatchMapping("/{uuid}")
     public ResponseEntity<ResultResponse> updateUser(@PathVariable UUID uuid, @RequestBody Map<String,String> request)
     {

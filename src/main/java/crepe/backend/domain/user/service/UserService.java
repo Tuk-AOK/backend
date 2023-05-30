@@ -44,6 +44,7 @@ public class UserService {
         User findUser = findUserByUuId(userUuid);
         return userMapper.mapUserEntityToUserInfo(findUser);
     }
+<<<<<<< HEAD
 
     // uuid를 이용해서 유저가 포함되어있는 프로젝트 찾는 함수
     public ProjectInfoList findUserProjectById(UUID userUuid, int page)
@@ -54,6 +55,9 @@ public class UserService {
         List<Project> projects = userMapper.getProjectList(userProjects);
         return userMapper.getProjectInfoList(projects);
     }
+=======
+    
+>>>>>>> b5a5a1aaed20543a0ef4246081313b915cb1087d
 
     public void updateUserInfo(UUID userUuid, Map<String, String> user)
     {

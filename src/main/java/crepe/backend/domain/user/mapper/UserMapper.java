@@ -40,6 +40,7 @@ public class UserMapper {
                 .photo(savedUser.getPhoto())
                 .build();
     }
+<<<<<<< HEAD
 
     public ProjectInfoList getProjectInfoList(List<Project> projects)
     {
@@ -66,4 +67,6 @@ public class UserMapper {
         }
         return projects;
     }
+=======
+>>>>>>> b5a5a1aaed20543a0ef4246081313b915cb1087d
 }

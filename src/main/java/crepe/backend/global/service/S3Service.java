@@ -33,23 +33,28 @@ public class S3Service {
 
     private final AmazonS3 s3Client;
 
-    public List<String> uploadFile(List<MultipartFile> multipartFile) {
+    public String uploadFile(MultipartFile file) {
+
+        String fileName = createFileName(file.getOriginalFilename());
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(file.getSize());
+        objectMetadata.setContentType(file.getContentType());
+
+        try(InputStream inputStream = file.getInputStream()) {
+            s3Client.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+        } catch(IOException e) {
+            throw new BusinessException(ErrorCode.FILE_UPLOAD_ERROR);
+        }
+
+        return s3Client.getUrl(bucket, fileName).toString();
+    }
+
+    public List<String> uploadFiles(List<MultipartFile> multipartFile) {
         List<String> fileNameList = new ArrayList<>();
 
         multipartFile.forEach(file -> {
-            String fileName = createFileName(file.getOriginalFilename());
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(file.getSize());
-            objectMetadata.setContentType(file.getContentType());
-
-            try(InputStream inputStream = file.getInputStream()) {
-                s3Client.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
-            } catch(IOException e) {
-                throw new BusinessException(ErrorCode.FILE_UPLOAD_ERROR);
-            }
-
-            fileNameList.add(s3Client.getUrl(bucket, fileName).toString());
+            fileNameList.add(uploadFile(file));
         });
 
         return fileNameList;

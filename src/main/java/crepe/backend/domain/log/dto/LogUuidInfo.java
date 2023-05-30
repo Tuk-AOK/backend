@@ -1,21 +1,15 @@
 package crepe.backend.domain.log.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
-@NoArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class LogUuidInfo {
     private UUID logUuid;
     private LocalDateTime logCreatedAt;
-
-    @Builder
-    public LogUuidInfo(UUID logUuid, LocalDateTime logCreatedAt) {
-        this.logUuid = logUuid;
-        this.logCreatedAt = logCreatedAt;
-    }
 }
