@@ -1,25 +1,24 @@
 package crepe.backend.domain.project.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Builder
 @Getter
-@RequiredArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class ProjectCreateRequest {
 
     @NotBlank(message = "프로젝트 이름을 입력해주세요.")
-    private final String name;
+    private String name;
 
     @NotNull(message = "유저 아이디를 입력해주세요.")
-    private final Long userId;
+    private Long userId;
 
-    private final String intro;
+    private String intro;
 
-    private final String preview;
+    private String preview;
 
 }

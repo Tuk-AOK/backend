@@ -42,10 +42,11 @@ public class ProjectMapper {
 
     public ProjectBranchInfoList getProjectBranchInfoList(List<Branch> branches) {
         List<ProjectBranchInfo> projectBranchInfos = new ArrayList<>();
-        for(int i = 0; i < branches.size(); i++) {
+        for(Branch branch: branches) {
             projectBranchInfos.add(ProjectBranchInfo.builder()
-                    .branchName(branches.get(i).getName())
-                    .branchUuid(branches.get(i).getUuid())
+                    .branchId(branch.getId())
+                    .branchUuid(branch.getUuid())
+                    .branchName(branch.getName())
                     .build());
         }
         return new ProjectBranchInfoList(projectBranchInfos);

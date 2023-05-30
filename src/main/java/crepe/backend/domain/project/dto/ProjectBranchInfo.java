@@ -1,21 +1,15 @@
 package crepe.backend.domain.project.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
 @Getter
-@NoArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class ProjectBranchInfo {
-
-    private String branchName;
+    private Long branchId;
     private UUID branchUuid;
-
-    @Builder
-    public ProjectBranchInfo(String branchName, UUID branchUuid) {
-        this.branchName = branchName;
-        this.branchUuid = branchUuid;
-    }
+    private String branchName;
 }

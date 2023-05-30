@@ -1,17 +1,16 @@
 package crepe.backend.domain.feedback.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
-@Builder
 @Getter
-@RequiredArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class FeedbackCreate {
 
-    private final Long userId;
+    private Long userId;
 
-    private final Long branchId;
+    private Long branchId;
 
-    private final String message;
+    private String message;
 }

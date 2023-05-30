@@ -1,13 +1,14 @@
 package crepe.backend.domain.branch.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class MergeResourceInfoList {
     List<MergeResourceInfo> mergeResourceInfos = new ArrayList<>();
 

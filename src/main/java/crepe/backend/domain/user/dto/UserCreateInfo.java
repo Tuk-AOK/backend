@@ -1,20 +1,13 @@
 package crepe.backend.domain.user.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
 @Getter
-@NoArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class UserCreateInfo {
-
     private UUID userUuid;
-
-    @Builder
-    public UserCreateInfo(UUID userUuid)
-    {
-        this.userUuid = userUuid;
-    }
 }

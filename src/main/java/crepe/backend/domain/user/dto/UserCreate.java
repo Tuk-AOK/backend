@@ -1,20 +1,15 @@
 package crepe.backend.domain.user.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
-@Builder
 @Getter
-@RequiredArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class UserCreate {
-
-    private final String email;
-
-    private final String password;
-
-    private final String photo;
-
-    private final String nickname;
+    private String email;
+    private String password;
+    private String photo;
+    private String nickname;
 
 }
