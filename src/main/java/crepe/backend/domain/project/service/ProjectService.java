@@ -71,6 +71,17 @@ public class ProjectService {
     }
 
 
+    public ProjectInfoList findUserProjectById(UUID uuid) {
+        User foundUser = findUserByUuid(uuid);
+        List<UserProject> userProjects = foundUser.getUserProjects();
+        List<Project> projects = projectMapper.getProjectList(userProjects);
+        return projectMapper.getProjectInfoList(projects);
+    }
+
+    public User findUserByUuid(UUID uuid)
+    {
+        return userRepository.findUserByUuidAndIsActiveTrue(uuid).orElseThrow(NotFoundUserEntityException::new);
+    }
 
     private void saveBranch(Project project,String name) {
         branchRepository.save(Branch.builder()

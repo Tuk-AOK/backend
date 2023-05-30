@@ -18,4 +18,6 @@ public class ProjectInfo {
     private UUID projectUuid;
     private String projectIntro;
     private String projectPreview;
+    private LocalDateTime projectCreatedAt;
+    private LocalDateTime projectUpdatedAt;
 }

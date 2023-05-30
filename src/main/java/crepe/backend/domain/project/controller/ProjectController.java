@@ -1,6 +1,7 @@
 
 package crepe.backend.domain.project.controller;
 
+import crepe.backend.domain.project.domain.entity.Project;
 import crepe.backend.domain.project.dto.*;
 import crepe.backend.domain.project.service.ProjectService;
 import crepe.backend.domain.user.dto.UserInfoList;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RequestMapping("/api/v1/projects")
@@ -27,6 +30,13 @@ public class ProjectController {
             @Valid @RequestBody ProjectCreateRequest request) {
         ProjectInfo projectInfo = projectService.createProject(request);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.CREATE_PROJECT_SUCCESS, projectInfo));
+    }
+
+    @GetMapping
+    public ResponseEntity<ResultResponse> findAllProject(
+            @Valid @RequestParam(required = false)Optional<UUID> userUuid) {
+        ProjectInfoList projectInfoList = projectService.findUserProjectById(userUuid.orElse(null));
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.READ_ALL_USER_PROJECT_SUCCESS, projectInfoList));
     }
 
     @GetMapping("/{uuid}")

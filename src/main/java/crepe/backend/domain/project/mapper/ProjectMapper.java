@@ -3,10 +3,7 @@ package crepe.backend.domain.project.mapper;
 import crepe.backend.domain.branch.domain.entity.Branch;
 import crepe.backend.domain.project.domain.entity.Project;
 import crepe.backend.domain.project.domain.entity.UserProject;
-import crepe.backend.domain.project.dto.ProjectBranchInfo;
-import crepe.backend.domain.project.dto.ProjectBranchInfoList;
-import crepe.backend.domain.project.dto.ProjectCreateRequest;
-import crepe.backend.domain.project.dto.ProjectInfo;
+import crepe.backend.domain.project.dto.*;
 import crepe.backend.domain.user.domain.entity.User;
 import crepe.backend.domain.user.dto.UserInfo;
 import crepe.backend.domain.user.dto.UserInfoList;
@@ -65,6 +62,8 @@ public class ProjectMapper {
                 .projectUuid(project.getUuid())
                 .projectIntro(project.getIntro())
                 .projectPreview(project.getPreview())
+                .projectCreatedAt(project.getCreatedAt())
+                .projectUpdatedAt(project.getUpdatedAt())
                 .build();
     }
 
@@ -75,5 +74,27 @@ public class ProjectMapper {
             users.add(userProjects.get(i).getUser());
         }
         return users;
+    }
+
+    public ProjectInfoList getProjectInfoList(List<Project> projects)
+    {
+        List<ProjectInfo> projectInfos = new ArrayList<>();
+
+        for(Project project: projects)
+        {
+            projectInfos.add(mapProjectEntityToProjectInfoResponse(project));
+        }
+
+        return new ProjectInfoList(projectInfos);
+    }
+
+    public List<Project> getProjectList(List<UserProject> userProjects) // 유저가 속해있는 프로젝트 ID를 얻기 위한 함수
+    {
+        List<Project> projects = new ArrayList<>();
+
+        for (UserProject userProject: userProjects) {
+            projects.add(userProject.getProject());
+        }
+        return projects;
     }
 }
