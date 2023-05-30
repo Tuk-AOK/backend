@@ -12,13 +12,10 @@ import javax.validation.constraints.NotNull;
 public class ProjectCreateRequest {
 
     @NotBlank(message = "프로젝트 이름을 입력해주세요.")
-    private String name;
+    private String projectName;
 
     @NotNull(message = "유저 아이디를 입력해주세요.")
-    private Long userId;
+    private Long projectUserId;
 
-    private String intro;
-
-    private String preview;
-
+    private String projectIntro;
 }

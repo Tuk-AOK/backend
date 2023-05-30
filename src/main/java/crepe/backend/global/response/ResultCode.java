@@ -22,6 +22,8 @@ public enum ResultCode {
     UPDATE_PROJECT_SUCCESS(200,"P005", "프로젝트 수정 성공"),
     DELETE_PROJECT_SUCCESS(200,"P006", "프로젝트 삭제 성공"),
     CREATE_USERPROJECT_SUCCESS(200, "P007", "프로젝트에 유저 추가 성공"),
+    UPDATE_PROJECT_PREVIEW_SUCCESS(200, "P008", "프로젝트 프리뷰 이미지 수정 완료"),
+
 
     // log
     CREATE_LOG_SUCCESS(200,"L001", "로그 생성 성공"),

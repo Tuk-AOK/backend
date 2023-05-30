@@ -54,8 +54,8 @@ public class ProjectMapper {
 
     public Project convertProjectFromRequest(ProjectCreateRequest projectCreateRequest) {
         return Project.builder()
-                .name(projectCreateRequest.getName())
-                .intro(projectCreateRequest.getIntro())
+                .name(projectCreateRequest.getProjectName())
+                .intro(projectCreateRequest.getProjectIntro())
                 .build();
     }
 
@@ -64,6 +64,7 @@ public class ProjectMapper {
                 .projectName(project.getName())
                 .projectUuid(project.getUuid())
                 .projectIntro(project.getIntro())
+                .projectPreview(project.getPreview())
                 .build();
     }
 

@@ -38,7 +38,7 @@ public class LogController {
         if (request.getFiles() == null) {
             throw new BusinessException(ErrorCode.EMPTY_FILES);
         }
-        List<String> fileLinks = s3Service.uploadFile(request.getFiles());
+        List<String> fileLinks = s3Service.uploadFiles(request.getFiles());
         List<Resource> resources = resourceService.createResourceList(request, fileLinks);
         Log log = logService.createLog(request);
         LogUuidInfo logUuidInfo = logService.createLogUuidInfo(log);

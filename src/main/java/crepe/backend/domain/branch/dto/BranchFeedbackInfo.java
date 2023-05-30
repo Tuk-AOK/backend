@@ -13,6 +13,6 @@ import java.util.UUID;
 public class BranchFeedbackInfo {
     private UUID userUuid;
     private String feedbackMessage;
+    private UUID feedbackUserUuid;
     private UUID feedbackUuid;
-
 }
