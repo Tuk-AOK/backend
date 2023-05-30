@@ -45,7 +45,7 @@ public class ProjectService {
 
         UserProject userProject = projectMapper.mapUserProject(foundUser, savedProject, true);
         userProjectRepository.save(userProject);
-        //saveBranch(savedProject, "main");
+        saveBranch(savedProject, "main");
 
         return projectMapper.mapProjectEntityToProjectInfoResponse(savedProject);
     }
@@ -73,6 +73,7 @@ public class ProjectService {
                 .name(name)
                 .build());
     }
+
 
     public ProjectInfo findProjectInfoByUuid(UUID uuid) {
         Project foundProject = findProjectByUuid(uuid);
