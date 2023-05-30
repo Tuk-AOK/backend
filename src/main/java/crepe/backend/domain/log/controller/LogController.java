@@ -28,7 +28,6 @@ public class LogController {
 
     private final LogService logService;
     private final ResourceService resourceService;
-
     private final S3Service s3Service;
 
     @PostMapping
@@ -38,11 +37,16 @@ public class LogController {
         if (request.getFiles() == null) {
             throw new BusinessException(ErrorCode.EMPTY_FILES);
         }
+
         List<String> fileLinks = s3Service.uploadFiles(request.getFiles());
         List<Resource> resources = resourceService.createResourceList(request, fileLinks);
         Log log = logService.createLog(request);
         LogUuidInfo logUuidInfo = logService.createLogUuidInfo(log);
         logService.createLayer(log, resources);
+
+        if (request.getPreview() != null && log.getBranch().getName().equals("main")) {
+            logService.updatePreview(log, s3Service.uploadFile(request.getPreview()));
+        }
 
         return ResponseEntity.ok(ResultResponse.of(ResultCode.CREATE_LOG_SUCCESS, logUuidInfo));
     }

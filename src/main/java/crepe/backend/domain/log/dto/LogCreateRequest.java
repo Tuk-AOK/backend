@@ -17,5 +17,5 @@ public class LogCreateRequest {
     private Long userId;
     private Long branchId;
     private String message;
-
+    private MultipartFile preview;
 }
