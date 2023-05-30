@@ -8,6 +8,7 @@ import crepe.backend.domain.user.domain.entity.User;
 import crepe.backend.domain.user.dto.UserCreate;
 import crepe.backend.domain.user.dto.UserCreateInfo;
 import crepe.backend.domain.user.dto.UserInfo;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class UserMapper {
         return new ProjectInfoList(projectInfos);
     }
 
-    public List<Project> getProjectList(List<UserProject> userProjects) // 유저가 속해있는 프로젝트 ID를 얻기 위한 함수
+    public List<Project> getProjectList(Page<UserProject> userProjects) // 유저가 속해있는 프로젝트 ID를 얻기 위한 함수
     {
         List<Project> projects = new ArrayList<>();
 

@@ -7,6 +7,7 @@ import crepe.backend.domain.user.dto.UserInfo;
 import crepe.backend.domain.user.service.UserService;
 import crepe.backend.global.response.ResultResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,9 +43,9 @@ public class UserController {
 
     // UUID를 이용해서 해당 유저가 가지고 있는 프로젝트 가져오기
     @GetMapping("/{uuid}/projects")
-    public ResponseEntity<ResultResponse> findByUserProjectById(@PathVariable UUID uuid)
+    public ResponseEntity<ResultResponse> findByUserProjectById(@PathVariable UUID uuid, @RequestParam("page") int page)
     {
-        ProjectInfoList projectList = userService.findUserProjectById(uuid);
+        ProjectInfoList projectList = userService.findUserProjectById(uuid, page);
         return ResponseEntity.ok(ResultResponse.of(READ_ALL_USER_PROJECT_SUCCESS, projectList));
     }
 

@@ -16,6 +16,7 @@ import crepe.backend.domain.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import crepe.backend.domain.user.exception.NotFoundUserEntityException;
 
@@ -45,10 +46,11 @@ public class UserService {
     }
 
     // uuid를 이용해서 유저가 포함되어있는 프로젝트 찾는 함수
-    public ProjectInfoList findUserProjectById(UUID userUuid)
+    public ProjectInfoList findUserProjectById(UUID userUuid, int page)
     {
+        Pageable pageable = PageRequest.of(page, 8);
         User findUser = findUserByUuId(userUuid);
-        List<UserProject> userProjects = findUserProjectByUser(findUser);
+        Page<UserProject> userProjects = findUserProjectByUser(findUser, pageable);
         List<Project> projects = userMapper.getProjectList(userProjects);
         return userMapper.getProjectInfoList(projects);
     }
@@ -73,9 +75,9 @@ public class UserService {
         return userRepository.findUserByUuidAndIsActiveTrue(userUuid).orElseThrow(NotFoundUserEntityException::new);
     }
 
-    private List<UserProject> findUserProjectByUser(User user)
+    private Page<UserProject> findUserProjectByUser(User user, Pageable pageable)
     {
-        return userProjectRepository.findAllByUserAndIsActiveTrue(user);
+        return userProjectRepository.findAllByUserAndIsActiveTrueOrderByIdDesc(user, pageable);
     }
 
     public User findUserById(Long userId)
