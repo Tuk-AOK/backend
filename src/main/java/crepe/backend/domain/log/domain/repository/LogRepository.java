@@ -2,6 +2,7 @@ package crepe.backend.domain.log.domain.repository;
 
 
 import crepe.backend.domain.log.domain.entity.Log;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import crepe.backend.domain.branch.domain.entity.Branch;
@@ -21,4 +22,6 @@ public interface LogRepository extends JpaRepository<Log, Long> {
     Optional<Log> findLogByIdAndIsActiveTrue(Long id);
 
     List<Log> findAllByBranchAndIsActiveTrueOrderByCreatedAtDesc(Branch branch);
+
+    Page<Log> findAllByBranchAndIsActiveTrueOrderByIdDesc(Branch branch, Pageable pageable);
 }

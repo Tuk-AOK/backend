@@ -5,6 +5,7 @@ import crepe.backend.domain.branch.service.BranchService;
 import crepe.backend.domain.log.dto.LogInfoList;
 import crepe.backend.global.response.ResultResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,9 +39,9 @@ public class BranchController {
     }
 
     @GetMapping("/{uuid}/logs")
-    public ResponseEntity<ResultResponse> findLogByUuid(@PathVariable UUID uuid)
+    public ResponseEntity<ResultResponse> findLogByUuid(@PathVariable UUID uuid, @RequestParam(required = false) int page)
     {
-        BranchLogInfoList branchLogInfoList = branchService.findLogInfoByUuid(uuid);
+        BranchLogInfoList branchLogInfoList = branchService.findLogInfoByUuid(uuid, page);
         return ResponseEntity.ok(ResultResponse.of(READ_BRANCH_LOG_SUCCESS, branchLogInfoList));
     }
 
@@ -75,9 +76,9 @@ public class BranchController {
     }
 
     @GetMapping("/{uuid}/feedbacks")
-    public ResponseEntity<ResultResponse> findFeebacksInBranch(@PathVariable UUID uuid)
+    public ResponseEntity<ResultResponse> findFeebacksInBranch(@PathVariable UUID uuid, @RequestParam(required = false) int page)
     {
-        List<BranchFeedbackInfo> branchfeedbackInfos = branchService.findFeedbackInfoByUuid(uuid);
+        List<BranchFeedbackInfo> branchfeedbackInfos = branchService.findFeedbackInfoByUuid(uuid, page);
         BranchFeedbackInfoList branchFeedbackInfoList = new BranchFeedbackInfoList();
         branchFeedbackInfoList.addAllBranchFeedbackInfo(branchfeedbackInfos);
         return ResponseEntity.ok(ResultResponse.of(READ_BRANCH_FEEDBACK_LIST_SUCCESS, branchFeedbackInfoList));

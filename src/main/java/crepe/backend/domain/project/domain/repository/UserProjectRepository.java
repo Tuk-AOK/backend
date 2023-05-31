@@ -17,6 +17,8 @@ public interface UserProjectRepository extends JpaRepository<UserProject, Long> 
 
     Page<UserProject> findAllByUserAndIsActiveTrueOrderByIdDesc(User user, Pageable pageable);
 
-    List<UserProject> findAllByProjectAndIsActiveTrue(Project projectByUuid);
+    Page<UserProject> findAllByProjectAndIsActiveTrueOrderByIdDesc(Project projectByUuid, Pageable pageable);
+
+    List<UserProject> findAllByProjectAndIsActiveTrue(Project project);
 
 }

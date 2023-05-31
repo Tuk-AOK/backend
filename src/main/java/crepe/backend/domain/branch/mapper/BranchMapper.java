@@ -6,6 +6,7 @@ import crepe.backend.domain.feedback.domain.entity.Feedback;
 import crepe.backend.domain.log.domain.entity.Log;
 import crepe.backend.domain.log.domain.entity.Resource;
 import crepe.backend.domain.project.domain.entity.Project;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class BranchMapper {
                 .build();
     }
 
-    public List<BranchFeedbackInfo> mapBranchEntityToBranchFeedbackInfos(List<Feedback> feedbacks) // Branch 타입을 BranchInfo 타입으로 변환하는 모듈
+    public List<BranchFeedbackInfo> mapBranchEntityToBranchFeedbackInfos(Page<Feedback> feedbacks) // Branch 타입을 BranchInfo 타입으로 변환하는 모듈
     {
         List<BranchFeedbackInfo> branchFeedbackInfos = new ArrayList<>();
         for(Feedback feedback: feedbacks) {
@@ -49,15 +50,15 @@ public class BranchMapper {
         return branchFeedbackInfos;
     }
 
-    public BranchLogInfoList getLogInfoList(List<Log> logs) // LogInfo들을 LogInfoList로 변환하는 모듈
+    public BranchLogInfoList getLogInfoList(Page<Log> logs) // LogInfo들을 LogInfoList로 변환하는 모듈
     {
         List<BranchLogInfo> logInfos = new ArrayList<>();
 
-        for(int i = 0; i < logs.size(); i ++)
+        for(Log log : logs)
         {
             logInfos.add(BranchLogInfo.builder()
-                    .logUuid(logs.get(i).getUuid())
-                    .logMessage(logs.get(i).getMessage())
+                    .logUuid(log.getUuid())
+                    .logMessage(log.getMessage())
                     .build());
         }
 

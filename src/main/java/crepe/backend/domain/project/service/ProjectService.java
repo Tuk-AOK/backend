@@ -18,10 +18,14 @@ import crepe.backend.domain.user.exception.NotFoundUserEntityException;
 import crepe.backend.domain.project.domain.entity.UserProject;
 import crepe.backend.domain.project.domain.repository.UserProjectRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -71,12 +75,14 @@ public class ProjectService {
     }
 
 
-    public ProjectInfoList findUserProjectById(UUID uuid) {
+    public ProjectInfoList findUserProjectById(UUID uuid, int page) {
+        Pageable pageable = PageRequest.of(page, 8);
         User foundUser = findUserByUuid(uuid);
-        List<UserProject> userProjects = foundUser.getUserProjects();
+        Page<UserProject> userProjects = userProjectRepository.findAllByUserAndIsActiveTrueOrderByIdDesc(foundUser, pageable);
         List<Project> projects = projectMapper.getProjectList(userProjects);
         return projectMapper.getProjectInfoList(projects);
     }
+
 
     public User findUserByUuid(UUID uuid)
     {
@@ -96,13 +102,17 @@ public class ProjectService {
         return projectMapper.mapProjectEntityToProjectInfoResponse(foundProject);
     }
 
-    public ProjectBranchInfoList findAllBranchInfoByUuid(UUID uuid) {
-        List<Branch> branches = branchRepository.findAllByProjectAndIsActiveTrue(findProjectByUuid(uuid));
+    public ProjectBranchInfoList findAllBranchInfoByUuid(UUID uuid, int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+
+        Page<Branch> branches = branchRepository.findAllByProjectAndIsActiveTrueOrderByIdDesc(findProjectByUuid(uuid), pageable);
         return projectMapper.getProjectBranchInfoList(branches);
     }
 
-    public UserInfoList findAllUserInfoByUuid(UUID uuid) {
-        List<UserProject> userProjects = userProjectRepository.findAllByProjectAndIsActiveTrue(findProjectByUuid(uuid));
+    public UserInfoList findAllUserInfoByUuid(UUID uuid, int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+
+        Page<UserProject> userProjects = userProjectRepository.findAllByProjectAndIsActiveTrueOrderByIdDesc(findProjectByUuid(uuid), pageable);
         return projectMapper.getUserInfoList(projectMapper.getUserList(userProjects));
     }
 
