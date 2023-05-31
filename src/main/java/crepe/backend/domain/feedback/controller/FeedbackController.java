@@ -28,6 +28,12 @@ public class FeedbackController {
          FeedbackCreateInfo feedbackCreate = feedbackService.createFeedback(createrequest);
         return ResponseEntity.ok(ResultResponse.of(CREATE_FEEDBACK_SUCCESS, feedbackCreate));
     }
+    @GetMapping
+    public ResponseEntity<ResultResponse> findAllFeedback(@Valid @RequestBody FeedbackCreate createrequest)
+    {
+        FeedbackCreateInfo feedbackCreate = feedbackService.createFeedback(createrequest);
+        return ResponseEntity.ok(ResultResponse.of(CREATE_FEEDBACK_SUCCESS, feedbackCreate));
+    }
 
 /*    @PatchMapping("/{uuid}")
     public ResponseEntity<ResultResponse> updateFeedback(@PathVariable UUID uuid, @RequestBody Map<String,String> request)
