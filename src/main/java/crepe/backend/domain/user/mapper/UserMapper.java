@@ -8,6 +8,7 @@ import crepe.backend.domain.user.domain.entity.User;
 import crepe.backend.domain.user.dto.UserCreate;
 import crepe.backend.domain.user.dto.UserCreateInfo;
 import crepe.backend.domain.user.dto.UserInfo;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

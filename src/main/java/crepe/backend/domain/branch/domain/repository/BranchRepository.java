@@ -3,6 +3,8 @@ package crepe.backend.domain.branch.domain.repository;
 
 import crepe.backend.domain.branch.domain.entity.Branch;
 import crepe.backend.domain.project.domain.entity.Project;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,5 +19,7 @@ public interface BranchRepository extends JpaRepository<Branch, Long> {
     Optional<Branch> findBranchByIdAndIsActiveTrue(Long branchId);
 
     Optional<Branch> findBranchByUuidAndIsActiveTrue(UUID uuid);
+
+    Page<Branch> findAllByProjectAndIsActiveTrueOrderByIdDesc(Project project, Pageable pageable);
 
 }

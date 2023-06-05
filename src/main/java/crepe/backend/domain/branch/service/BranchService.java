@@ -21,6 +21,7 @@ import crepe.backend.domain.branch.exception.NotFoundBranchEntityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -55,21 +56,24 @@ public class BranchService {
         return branchMapper.mapBranchEntityToBranchInfo(findBranch);
     }
 
-    public BranchLogInfoList findLogInfoByUuid(UUID uuid) { // 해당 브랜치의 모든 로그 정보를 찾는 모듈
+    public BranchLogInfoList findLogInfoByUuid(UUID uuid, int page) { // 해당 브랜치의 모든 로그 정보를 찾는 모듈
+        Pageable pageable = PageRequest.of(page, 10);
+
         Branch findBranch = findBranchByUuid(uuid);
-        List<Log> logs = getLogList(findBranch);
+        Page<Log> logs = getLogList(findBranch, pageable);
         return branchMapper.getLogInfoList(logs);
     }
 
-    public List<BranchFeedbackInfo> findFeedbackInfoByUuid(UUID branchUuid)
+    public List<BranchFeedbackInfo> findFeedbackInfoByUuid(UUID branchUuid, int page)
     {
+        Pageable pageable = PageRequest.of(page, 10);
         Branch findBranch = findBranchByUuid(branchUuid);
-        return branchMapper.mapBranchEntityToBranchFeedbackInfos(getFeedbackListByBranch(findBranch));
+        return branchMapper.mapBranchEntityToBranchFeedbackInfos(getFeedbackListByBranch(findBranch, pageable));
     }
 
-    private List<Feedback> getFeedbackListByBranch(Branch branch)
+    private Page<Feedback> getFeedbackListByBranch(Branch branch, Pageable pageable)
     {
-        return feedbackRepository.findAllByBranchAndIsActiveTrueOrderByCreatedAtDesc(branch);
+        return feedbackRepository.findAllByBranchAndIsActiveTrueOrderByCreatedAtDesc(branch, pageable);
     }
 
     private Branch findBranchByUuid(UUID uuid) { // 쿼리를 이용해서 UUID를 가지고 브랜치를 찾는 모듈
@@ -81,8 +85,8 @@ public class BranchService {
         return branchRepository.findBranchByIdAndIsActiveTrue(id).orElseThrow(NotFoundBranchEntityException::new);
     }
 
-    private List<Log> getLogList(Branch branch) { // 쿼리를 이용해서 BranchId로 해당 브랜치에 있는 로그들을 가져오는 모듈
-        List<Log> logs = logRepository.findAllLogByBranchAndIsActiveTrue(branch);
+    private Page<Log> getLogList(Branch branch, Pageable pageable) { // 쿼리를 이용해서 BranchId로 해당 브랜치에 있는 로그들을 가져오는 모듈
+        Page<Log> logs = logRepository.findAllByBranchAndIsActiveTrueOrderByIdDesc(branch, pageable);
 
         return logs;
     }

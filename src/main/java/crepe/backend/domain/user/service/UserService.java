@@ -16,6 +16,7 @@ import crepe.backend.domain.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import crepe.backend.domain.user.exception.NotFoundUserEntityException;
 
@@ -43,7 +44,6 @@ public class UserService {
         User findUser = findUserByUuId(userUuid);
         return userMapper.mapUserEntityToUserInfo(findUser);
     }
-    
 
     public void updateUserInfo(UUID userUuid, Map<String, String> user)
     {
@@ -65,9 +65,9 @@ public class UserService {
         return userRepository.findUserByUuidAndIsActiveTrue(userUuid).orElseThrow(NotFoundUserEntityException::new);
     }
 
-    private List<UserProject> findUserProjectByUser(User user)
+    private Page<UserProject> findUserProjectByUser(User user, Pageable pageable)
     {
-        return userProjectRepository.findAllByUserAndIsActiveTrue(user);
+        return userProjectRepository.findAllByUserAndIsActiveTrueOrderByIdDesc(user, pageable);
     }
 
     public User findUserById(Long userId)

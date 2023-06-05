@@ -14,8 +14,8 @@ services:
       - "3307:3306"
     volumes:
       - data_mysql:/var/lib/mysql
-#    networks:
-#      - app-tier
+    #    networks:
+    #      - app-tier
     tty: true
 
 #  backend:

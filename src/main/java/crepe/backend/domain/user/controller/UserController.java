@@ -7,6 +7,7 @@ import crepe.backend.domain.user.dto.UserInfo;
 import crepe.backend.domain.user.service.UserService;
 import crepe.backend.global.response.ResultResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
