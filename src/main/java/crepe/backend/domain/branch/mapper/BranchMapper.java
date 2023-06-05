@@ -58,7 +58,7 @@ public class BranchMapper {
         {
             logInfos.add(BranchLogInfo.builder()
                     .logUuid(log.getUuid())
-                    .logMessage(log.getMessage())
+                    .logCreatedAt(log.getCreatedAt())
                     .build());
         }
 
