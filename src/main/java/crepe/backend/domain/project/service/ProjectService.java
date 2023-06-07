@@ -4,11 +4,18 @@ package crepe.backend.domain.project.service;
 import crepe.backend.domain.branch.domain.entity.Branch;
 import crepe.backend.domain.branch.domain.repository.BranchRepository;
 import crepe.backend.domain.branch.dto.BranchInfo;
+import crepe.backend.domain.branch.exception.NotFoundBranchEntityException;
+import crepe.backend.domain.log.domain.entity.Layer;
+import crepe.backend.domain.log.domain.entity.Log;
+import crepe.backend.domain.log.domain.entity.Resource;
+import crepe.backend.domain.log.domain.repository.LogRepository;
+import crepe.backend.domain.log.domain.repository.ResourceRepository;
 import crepe.backend.domain.project.dto.*;
 import crepe.backend.domain.project.domain.entity.Project;
 import crepe.backend.domain.project.domain.repository.ProjectRepository;
 import crepe.backend.domain.project.exception.EventDuplicationUserException;
 import crepe.backend.domain.project.exception.NotFoundProjectEntityException;
+import crepe.backend.domain.project.exception.NotFoundResourceEntity;
 import crepe.backend.domain.project.mapper.ProjectMapper;
 import crepe.backend.domain.user.domain.entity.User;
 import crepe.backend.domain.user.domain.repository.UserRepository;
@@ -32,8 +39,26 @@ public class ProjectService {
     private final UserRepository userRepository;
     private final BranchRepository branchRepository;
     private final UserProjectRepository userProjectRepository;
+
+    private final ResourceRepository resourceRepository;
+
+    private final LogRepository logRepository;
     private final ProjectMapper projectMapper;
 
+    public Resource findMainResourceByName(UUID projectUuid, String resourceName) {
+        Branch branch = branchRepository.findBranchByProjectAndIsActiveTrueAndName(findProjectByUuid(projectUuid), "main").orElseThrow(NotFoundBranchEntityException::new);
+        Log log = getRecentLogByBranch(branch);
+        for (Layer layer:log.getLayers()){
+            if (layer.getResource().getName().equals(resourceName)) {
+                return layer.getResource();
+            }
+        }
+        throw new NotFoundResourceEntity();
+    }
+
+    private Log getRecentLogByBranch(Branch branch) {
+        return logRepository.findAllByBranchAndIsActiveTrueOrderByCreatedAtDesc(branch).get(0);
+    }
     public ProjectInfo createProject(ProjectCreateRequest projectCreateRequest) {
         Project newProject = projectMapper.convertProjectFromRequest(projectCreateRequest);
         User foundUser = getUserById(projectCreateRequest.getProjectUserId());

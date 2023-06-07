@@ -23,6 +23,7 @@ public enum ResultCode {
     CREATE_USERPROJECT_SUCCESS(200, "P007", "프로젝트에 유저 추가 성공"),
     UPDATE_PROJECT_PREVIEW_SUCCESS(200, "P008", "프로젝트 프리뷰 이미지 수정 완료"),
     READ_ALL_USER_PROJECT_SUCCESS(200, "P009", "전체 프로젝트 조회 성공"),
+    READ_PROJECT_MAIN_RESOURCE_SUCCESS(200, "P010", "특정 프로젝트의 메인 브랜치의 특정 리소스 조회 성공"),
 
 
 

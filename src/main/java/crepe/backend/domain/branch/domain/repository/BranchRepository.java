@@ -4,6 +4,7 @@ package crepe.backend.domain.branch.domain.repository;
 import crepe.backend.domain.branch.domain.entity.Branch;
 import crepe.backend.domain.project.domain.entity.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,5 +18,7 @@ public interface BranchRepository extends JpaRepository<Branch, Long> {
     Optional<Branch> findBranchByIdAndIsActiveTrue(Long branchId);
 
     Optional<Branch> findBranchByUuidAndIsActiveTrue(UUID uuid);
+
+    Optional<Branch> findBranchByProjectAndIsActiveTrueAndName(Project project, String name);
 
 }
