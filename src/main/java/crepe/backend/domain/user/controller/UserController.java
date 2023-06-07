@@ -6,6 +6,7 @@ import crepe.backend.domain.user.dto.UserCreateInfo;
 import crepe.backend.domain.user.dto.UserInfo;
 import crepe.backend.domain.user.service.UserService;
 import crepe.backend.global.response.ResultResponse;
+import crepe.backend.global.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +27,9 @@ public class UserController {
 
     // API 테스트를 위한 유저 추가
     @PostMapping
-    public ResponseEntity<ResultResponse> createUser(@Valid @RequestBody UserCreate createrequest)
+    public ResponseEntity<ResultResponse> createUser(@Valid @ModelAttribute UserCreate userCreateRequest)
     {
-        UserCreateInfo userInfo = userService.userCreate(createrequest);
+        UserCreateInfo userInfo = userService.userCreate(userCreateRequest);
         return ResponseEntity.ok(ResultResponse.of(CREATE_USER_SUCCESS, userInfo));
     }
 
@@ -52,4 +53,6 @@ public class UserController {
         userService.deleteUser(uuid);
         return ResponseEntity.ok(ResultResponse.of(DELETE_USER_SUCCESS, ""));
     }
+
+
 }

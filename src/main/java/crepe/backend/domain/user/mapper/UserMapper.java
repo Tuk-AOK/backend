@@ -8,20 +8,27 @@ import crepe.backend.domain.user.domain.entity.User;
 import crepe.backend.domain.user.dto.UserCreate;
 import crepe.backend.domain.user.dto.UserCreateInfo;
 import crepe.backend.domain.user.dto.UserInfo;
+import crepe.backend.global.service.S3Service;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserMapper {
 
-    public User mapUserInfoToUser(UserCreate usercreate) {
+    private final S3Service s3Service;
+    public User mapUserInfoToUser(UserCreate userCreateRequest) {
+        String userPhotoLink = s3Service.uploadFile(userCreateRequest.getUserPhoto());
+        System.out.println(userPhotoLink);
         return User.builder()
-                .email(usercreate.getEmail())
-                .password(usercreate.getPassword())
-                .photo(usercreate.getPhoto())
-                .nickname(usercreate.getNickname())
+                .email(userCreateRequest.getUserEmail())
+                .password(userCreateRequest.getUserPassword())
+                .nickname(userCreateRequest.getUserNickname())
+                .photo(userPhotoLink)
                 .build();
     }
 
@@ -33,10 +40,11 @@ public class UserMapper {
 
     public UserInfo mapUserEntityToUserInfo(User savedUser) {
         return UserInfo.builder()
+                .userId(savedUser.getId())
                 .userUuid(savedUser.getUuid())
-                .email(savedUser.getEmail())
-                .nickname(savedUser.getNickname())
-                .photo(savedUser.getPhoto())
+                .userEmail(savedUser.getEmail())
+                .userNickname(savedUser.getNickname())
+                .userPhoto(savedUser.getPhoto())
                 .build();
     }
 }

@@ -45,7 +45,7 @@ public class LogController {
         LogUuidInfo logUuidInfo = logService.createLogUuidInfo(log);
         logService.createLayer(log, resources);
 
-        if (request.getPreview() != null && log.getBranch().getName().equals("main")) {
+        if (request.getPreview() != null && log.getBranch().getName().equals("main")) { //메인 브랜치 일 경우
             logService.updatePreview(log, previewLink);
         }
 

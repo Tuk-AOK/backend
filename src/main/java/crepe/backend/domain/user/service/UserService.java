@@ -13,6 +13,7 @@ import crepe.backend.domain.user.dto.UserInfo;
 import crepe.backend.domain.project.domain.repository.UserProjectRepository;
 import crepe.backend.domain.user.domain.repository.UserRepository;
 import crepe.backend.domain.user.mapper.UserMapper;
+import crepe.backend.global.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,23 +32,26 @@ public class UserService {
     private final ProjectRepository projectRepository;
     private final UserMapper userMapper;
 
-    // 테스트를 위한 유저 추가와 관련된 코드
-    public UserCreateInfo userCreate(UserCreate usercreate) {
-        User userdata = userMapper.mapUserInfoToUser(usercreate);
-        User savedata = userRepository.save(userdata);
-        return userMapper.mapUserEntityToUserCreateInfo(savedata);
+
+    // 테스트를 위한 유저 추가 코드
+    public UserCreateInfo userCreate(UserCreate userCreateRequest) {
+
+        User newUser = userMapper.mapUserInfoToUser(userCreateRequest);
+        User savedUser = userRepository.save(newUser);
+
+        return userMapper.mapUserEntityToUserCreateInfo(savedUser);
     }
 
     // uuid로 유저 찾기
     public UserInfo findUserInfoById(UUID userUuid) {
-        User findUser = findUserByUuId(userUuid);
+        User findUser = findUserByUuid(userUuid);
         return userMapper.mapUserEntityToUserInfo(findUser);
     }
     
 
     public void updateUserInfo(UUID userUuid, Map<String, String> user)
     {
-        User oUser = findUserByUuId(userUuid);
+        User oUser = findUserByUuid(userUuid);
 
         oUser.updateUser(user.get("email"), user.get("password"), user.get("nickname"), user.get("photo"));
 
@@ -55,12 +59,12 @@ public class UserService {
     }
 
     public void deleteUser(UUID userUuid) {
-        User user = findUserByUuId(userUuid);
+        User user = findUserByUuid(userUuid);
         userRepository.deleteById(user.getId());
     }
 
     // 해당 uuid의 유저를 얻기 위한 함수
-    public User findUserByUuId(UUID userUuid)
+    public User findUserByUuid(UUID userUuid)
     {
         return userRepository.findUserByUuidAndIsActiveTrue(userUuid).orElseThrow(NotFoundUserEntityException::new);
     }

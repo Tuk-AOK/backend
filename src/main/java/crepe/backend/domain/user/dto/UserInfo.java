@@ -10,11 +10,13 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserInfo {
 
+    private Long userId;
+
     private UUID userUuid;
 
-    private String email;
+    private String userEmail;
 
-    private String nickname;
+    private String userNickname;
 
-    private String photo;
+    private String userPhoto;
 }

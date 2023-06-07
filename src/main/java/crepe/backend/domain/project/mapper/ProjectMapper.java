@@ -29,9 +29,9 @@ public class ProjectMapper {
         for(int i = 0; i < users.size(); i++) {
             userInfos.add(UserInfo.builder()
                     .userUuid(users.get(i).getUuid())
-                    .email(users.get(i).getEmail())
-                    .nickname(users.get(i).getNickname())
-                    .photo(users.get(i).getPhoto())
+                    .userEmail(users.get(i).getEmail())
+                    .userNickname(users.get(i).getNickname())
+                    .userPhoto(users.get(i).getPhoto())
                     .build());
         }
         return new UserInfoList(userInfos);
