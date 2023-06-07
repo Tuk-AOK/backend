@@ -1,7 +1,11 @@
 package crepe.backend.domain.log.mapper;
 
+import crepe.backend.domain.branch.domain.entity.Branch;
+import crepe.backend.domain.log.domain.entity.Log;
 import crepe.backend.domain.log.domain.entity.Resource;
+import crepe.backend.domain.log.dto.LogCreateRequest;
 import crepe.backend.domain.log.dto.ResourceInfo;
+import crepe.backend.domain.user.domain.entity.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,5 +24,14 @@ public class LogMapper {
                     .build());
         }
         return resourceInfos;
+    }
+
+    public Log createLogEntity(Branch branch, User user, String message, String preview) {
+        return Log.builder()
+                .branch(branch)
+                .user(user)
+                .message(message)
+                .preview(preview)
+                .build();
     }
 }

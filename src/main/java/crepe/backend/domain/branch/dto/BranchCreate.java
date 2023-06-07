@@ -2,6 +2,8 @@ package crepe.backend.domain.branch.dto;
 
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -11,4 +13,5 @@ public class BranchCreate {
     private String name;
 
     private Long projectId;
+
 }

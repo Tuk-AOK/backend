@@ -14,7 +14,6 @@ import java.util.List;
 
 @Service
 public class BranchMapper {
-
     public Branch mapBranchCreateToBranch(BranchCreate branchCreate, Project project) { // BranchCreate 타입을 Branch 타입으로 변환하는 모듈
         return Branch.builder()
                 .project(project)

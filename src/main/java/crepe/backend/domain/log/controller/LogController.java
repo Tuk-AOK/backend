@@ -39,8 +39,9 @@ public class LogController {
         }
 
         List<String> fileLinks = s3Service.uploadFiles(request.getFiles());
+        String previewLink = s3Service.uploadFile(request.getPreview());
         List<Resource> resources = resourceService.createResourceList(request, fileLinks);
-        Log log = logService.createLog(request);
+        Log log = logService.createLog(request, previewLink);
         LogUuidInfo logUuidInfo = logService.createLogUuidInfo(log);
         logService.createLayer(log, resources);
 
