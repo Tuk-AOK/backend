@@ -38,7 +38,10 @@ public enum ErrorCode {
     FEEDBACK_NOT_FOUND(400, "F001", "피드백 찾기 실패"),
 
     // dummy
-    DUMMY_ERROR(400, "D001", "여기서 에러 발생")
+    DUMMY_ERROR(400, "D001", "여기서 에러 발생"),
+
+    // Page
+    PAGE_ERROR(400, "PA001", "페이지 입력 오류"),
 
     ;
 

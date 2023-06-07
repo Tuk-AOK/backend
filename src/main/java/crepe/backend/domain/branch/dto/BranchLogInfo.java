@@ -2,6 +2,7 @@ package crepe.backend.domain.branch.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -11,6 +12,6 @@ import java.util.UUID;
 public class BranchLogInfo {
 
     private UUID logUuid;
-    private String logMessage;
+    private LocalDateTime logCreatedAt;
 
 }

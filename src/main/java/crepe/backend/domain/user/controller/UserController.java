@@ -8,6 +8,7 @@ import crepe.backend.domain.user.service.UserService;
 import crepe.backend.global.response.ResultResponse;
 import crepe.backend.global.service.S3Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
