@@ -75,12 +75,7 @@ public class LogService {
             resources.add(getResourceById(layer.getResource().getId()));
         }
 
-        return LogInfo.builder()
-                .userUuid(log.getUser().getUuid())
-                .logMessage(log.getMessage())
-                .logCreatedAt(log.getCreatedAt())
-                .resourceInfos(logMapper.getResourceInfoList(resources))
-                .build();
+        return logMapper.createLogInfoEntity(log, logMapper.getResourceInfoList(resources));
     }
 
     public void deleteLog(UUID uuid) {

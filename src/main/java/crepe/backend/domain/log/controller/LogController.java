@@ -46,7 +46,7 @@ public class LogController {
         logService.createLayer(log, resources);
 
         if (request.getPreview() != null && log.getBranch().getName().equals("main")) {
-            logService.updatePreview(log, s3Service.uploadFile(request.getPreview()));
+            logService.updatePreview(log, previewLink);
         }
 
         return ResponseEntity.ok(ResultResponse.of(ResultCode.CREATE_LOG_SUCCESS, logUuidInfo));

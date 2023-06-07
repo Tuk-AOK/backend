@@ -13,6 +13,7 @@ import java.util.UUID;
 public class LogInfo {
     private UUID userUuid;
     private String logMessage;
+    private String logPreview;
     private LocalDateTime logCreatedAt;
     private List<ResourceInfo> resourceInfos;
 }

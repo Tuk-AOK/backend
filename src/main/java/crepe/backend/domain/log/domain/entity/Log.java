@@ -40,7 +40,7 @@ public class Log extends BaseEntity {
     @Column(name = "message", nullable = false)
     private String message;
 
-    @Column(name = "preview", nullable = false)
+    @Column(name = "preview")
     private String preview;
 
 
