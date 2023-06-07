@@ -12,4 +12,5 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     Optional<Project> findProjectByUuidAndIsActiveTrue(UUID uuid);
 
     Optional<Project> findProjectByIdAndIsActiveTrue(Long projectId);
+
 }

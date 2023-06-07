@@ -40,12 +40,15 @@ public class BranchService {
 
 
     public BranchCreateInfo branchCreate(BranchCreate createRequest) { // 브랜치를 생성하는 모듈
-        Project findProject = getProjectById(createRequest.getProjectId());
-        Branch branchdata = branchMapper.mapBranchCreateToBranch(createRequest, findProject);
-        Branch savedata = branchRepository.save(branchdata);
+        Project foundProject = getProjectById(createRequest.getProjectId());
 
-        return branchMapper.mapBranchEntityToBranchCreateInfo(savedata);
+        Branch newBranch = branchMapper.mapBranchCreateToBranch(createRequest, foundProject);
+        Branch savedBranch = branchRepository.save(newBranch);
+
+        return branchMapper.mapBranchEntityToBranchCreateInfo(savedBranch);
     }
+
+
     private Project getProjectById(Long projectId) {
         return projectRepository.findProjectByIdAndIsActiveTrue(projectId).orElseThrow(NotFoundProjectEntityException::new);
     }

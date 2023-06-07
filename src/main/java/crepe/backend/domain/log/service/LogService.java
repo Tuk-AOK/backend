@@ -46,13 +46,14 @@ public class LogService {
                 .logCreatedAt(log.getCreatedAt())
                 .build();
     }
-    public Log createLog(LogCreateRequest request) {
+    public Log createLog(LogCreateRequest request, String previewLink) {
 
         try {
-            Log log = createLogEntity(
+            Log log = logMapper.createLogEntity(
                     getBranchById(request.getBranchId()),
                     getUserById(request.getUserId()),
-                    request.getMessage());
+                    request.getMessage(),
+                    previewLink);
             return logRepository.save(log);
         } catch(Exception e) {
             throw new BusinessException(ErrorCode.LOG_CREATE_ERROR);
@@ -74,25 +75,13 @@ public class LogService {
             resources.add(getResourceById(layer.getResource().getId()));
         }
 
-        return LogInfo.builder()
-                .userUuid(log.getUser().getUuid())
-                .logMessage(log.getMessage())
-                .logCreatedAt(log.getCreatedAt())
-                .resourceInfos(logMapper.getResourceInfoList(resources))
-                .build();
+        return logMapper.createLogInfoEntity(log, logMapper.getResourceInfoList(resources));
     }
 
     public void deleteLog(UUID uuid) {
         logRepository.deleteById(getLogByUuid(uuid).getId());
     }
 
-    private Log createLogEntity(Branch branch, User user, String message) {
-        return Log.builder()
-                .branch(branch)
-                .user(user)
-                .message(message)
-                .build();
-    }
 
     private User getUserById(Long userId) {
         return userRepository.findUserByIdAndIsActiveTrue(userId).orElseThrow(NotFoundUserEntityException::new);
