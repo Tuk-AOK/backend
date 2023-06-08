@@ -10,12 +10,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class FeedbackMapper {
 
-    public Feedback getFeedback(FeedbackCreate createrequest, User user, Branch branch)
+    public Feedback getFeedback(FeedbackCreate createRequest, User user, Branch branch)
     {
         return Feedback.builder()
                 .user(user)
                 .branch(branch)
-                .message(createrequest.getMessage())
+                .message(createRequest.getMessage())
+                .status(createRequest.getStatus())
                 .build();
     }
 

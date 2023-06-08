@@ -40,11 +40,17 @@ public class Log extends BaseEntity {
     @Column(name = "message", nullable = false)
     private String message;
 
+    @Column(name = "preview")
+    private String preview;
+
+
     @Builder
-    public Log(Branch branch, User user, String message) {
+    public Log(Branch branch, User user, String message, String preview) {
         this.branch = branch;
         this.user = user;
         this.message = message;
+        this.preview = preview;
+
         super.isActive = true;
         this.uuid = UUID.randomUUID();
     }

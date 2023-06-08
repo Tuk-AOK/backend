@@ -1,6 +1,7 @@
 
 package crepe.backend.domain.project.controller;
 
+import crepe.backend.domain.log.domain.entity.Resource;
 import crepe.backend.domain.project.domain.entity.Project;
 import crepe.backend.domain.project.dto.*;
 import crepe.backend.domain.project.service.ProjectService;
@@ -79,6 +80,15 @@ public class ProjectController {
             @Valid @RequestBody UserProjectCreateRequest userProjectCreateRequest) {
         projectService.createUserProject(userProjectCreateRequest.getUserId(), userProjectCreateRequest.getProjectId());
         return  ResponseEntity.ok(ResultResponse.of(ResultCode.CREATE_USERPROJECT_SUCCESS,""));
+    }
+
+    @GetMapping("/{projectUuid}/main/resources/{resourceName}")
+    public ResponseEntity<ResultResponse> createUserProject(
+            @PathVariable UUID projectUuid,
+            @PathVariable String resourceName) {
+
+        Resource resource = projectService.findMainResourceByName(projectUuid, resourceName);
+        return  ResponseEntity.ok(ResultResponse.of(ResultCode.READ_PROJECT_MAIN_RESOURCE_SUCCESS, resource.getLink()));
     }
 
 }

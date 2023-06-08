@@ -39,13 +39,14 @@ public class LogController {
         }
 
         List<String> fileLinks = s3Service.uploadFiles(request.getFiles());
+        String previewLink = s3Service.uploadFile(request.getPreview());
         List<Resource> resources = resourceService.createResourceList(request, fileLinks);
-        Log log = logService.createLog(request);
+        Log log = logService.createLog(request, previewLink);
         LogUuidInfo logUuidInfo = logService.createLogUuidInfo(log);
         logService.createLayer(log, resources);
 
-        if (request.getPreview() != null && log.getBranch().getName().equals("main")) {
-            logService.updatePreview(log, s3Service.uploadFile(request.getPreview()));
+        if (request.getPreview() != null && log.getBranch().getName().equals("main")) { //메인 브랜치 일 경우
+            logService.updatePreview(log, previewLink);
         }
 
         return ResponseEntity.ok(ResultResponse.of(ResultCode.CREATE_LOG_SUCCESS, logUuidInfo));

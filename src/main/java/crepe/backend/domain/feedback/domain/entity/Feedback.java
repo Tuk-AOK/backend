@@ -37,11 +37,15 @@ public class Feedback extends BaseEntity {
     @Column(name = "message", length = 200, nullable = false)
     private String message;
 
+    @Enumerated(EnumType.STRING)
+    private FeedbackStatus status;
+
     @Builder
-    public Feedback(User user, Branch branch, String message) {
+    public Feedback(User user, Branch branch, String message, FeedbackStatus status) {
         this.user = user;
         this.branch = branch;
         this.message = message;
+        this.status = status;
         super.isActive = true;
         this.uuid = UUID.randomUUID();
     }
