@@ -36,6 +36,7 @@ public enum ErrorCode {
 
     // feedback
     FEEDBACK_NOT_FOUND(400, "F001", "피드백 찾기 실패"),
+    FEEDBACK_NOT_FOUND_STATUS_ERROR(400, "F003", "잘못된 피드백 상태 값"),
 
     // dummy
     DUMMY_ERROR(400, "D001", "여기서 에러 발생"),

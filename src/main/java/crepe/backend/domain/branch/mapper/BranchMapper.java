@@ -44,6 +44,7 @@ public class BranchMapper {
                     .feedbackMessage(feedback.getMessage())
                     .feedbackUserUuid(feedback.getUser().getUuid())
                     .feedbackUuid(feedback.getUuid())
+                    .feedbackStatus(feedback.getStatus())
                     .build());
         }
         return branchFeedbackInfos;

@@ -45,7 +45,7 @@ public class UserService {
 
     // uuid로 유저 찾기
     public UserInfo findUserInfoByUuId(UUID userUuid) {
-        User findUser = findUserByUuId(userUuid);
+        User findUser = findUserByUuid(userUuid);
 
         return userMapper.mapUserEntityToUserInfo(findUser);
     }

@@ -49,4 +49,8 @@ public class Feedback extends BaseEntity {
         super.isActive = true;
         this.uuid = UUID.randomUUID();
     }
+
+    public void updateStatus(FeedbackStatus status) {
+        this.status = status;
+    }
 }
