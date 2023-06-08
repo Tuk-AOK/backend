@@ -35,9 +35,9 @@ public class UserController {
 
     // UUID를 이용해 유저 찾기
     @GetMapping("/{uuid}")
-    public ResponseEntity<ResultResponse> findById(@PathVariable UUID uuid)
+    public ResponseEntity<ResultResponse> findByUuId(@PathVariable UUID uuid)
     {
-        UserInfo userInfo = userService.findUserInfoById(uuid);
+        UserInfo userInfo = userService.findUserInfoByUuId(uuid);
         return ResponseEntity.ok(ResultResponse.of(READ_ONE_USER_SUCCESS, userInfo));
     }
 

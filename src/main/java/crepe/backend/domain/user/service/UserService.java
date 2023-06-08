@@ -40,7 +40,7 @@ public class UserService {
     }
 
     // uuid로 유저 찾기
-    public UserInfo findUserInfoById(UUID userUuid) {
+    public UserInfo findUserInfoByUuId(UUID userUuid) {
         User findUser = findUserByUuId(userUuid);
         return userMapper.mapUserEntityToUserInfo(findUser);
     }

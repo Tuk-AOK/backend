@@ -57,7 +57,7 @@ public class LogController {
     }
 
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<ResultResponse> deleteUser(@PathVariable UUID uuid) {
+    public ResponseEntity<ResultResponse> deleteLog(@PathVariable UUID uuid) {
         logService.deleteLog(uuid);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.DELETE_LOG_SUCCESS, ""));
     }
