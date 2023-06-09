@@ -91,4 +91,18 @@ public class BranchMapper {
         }
         return fileInfos;
     }
+
+    public BranchRecentLogResourceInfoList getBranchRecentLogResourceInfoList(List<Resource> recentLogResources)
+    {
+        List<BranchRecentLogResourceInfo> branchRecentLogResourceInfos = new ArrayList<>();
+
+        for(Resource resource: recentLogResources) {
+            branchRecentLogResourceInfos.add(BranchRecentLogResourceInfo.builder()
+                    .fileName(resource.getName())
+                    .fileLink(resource.getLink())
+                    .build());
+        }
+
+        return new BranchRecentLogResourceInfoList(branchRecentLogResourceInfos);
+    }
 }

@@ -83,4 +83,11 @@ public class BranchController {
         branchFeedbackInfoList.addAllBranchFeedbackInfo(branchfeedbackInfos);
         return ResponseEntity.ok(ResultResponse.of(READ_BRANCH_FEEDBACK_LIST_SUCCESS, branchFeedbackInfoList));
     }
+
+    @GetMapping("/{uuid}/resources/recent")
+    public ResponseEntity<ResultResponse> findRecentLogResource(@PathVariable UUID uuid)
+    {
+        BranchRecentLogResourceInfoList branchRecentLogResource = branchService.findBranchRecentLogResource(uuid);
+        return ResponseEntity.ok(ResultResponse.of(READ_BRANCH_RECENT_LOG_RESOURCE, branchRecentLogResource));
+    }
 }
