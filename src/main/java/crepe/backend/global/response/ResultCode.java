@@ -9,6 +9,7 @@ public enum ResultCode {
 
     // user
     CREATE_USER_SUCCESS(200, "U001", "사용자 추가 성공"),
+    USER_LOGIN_SUCCESS(200, "U002", "로그인 성공"),
     READ_ONE_USER_SUCCESS(200, "U003", "사용자 정보 조회 성공"),
     UPDATE_USER_SUCCESS(200, "U004", "사용자 정보 수정 성공"),
     DELETE_USER_SUCCESS(200, "U005", "사용자 삭제 성공"),

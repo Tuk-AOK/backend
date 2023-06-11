@@ -9,6 +9,7 @@ import crepe.backend.domain.user.dto.UserCreate;
 import crepe.backend.domain.user.dto.UserCreateInfo;
 import crepe.backend.domain.user.dto.UserInfo;
 
+import crepe.backend.domain.user.dto.UserLogInResponseInfo;
 import crepe.backend.global.service.S3Service;
 import lombok.RequiredArgsConstructor;
 
@@ -49,6 +50,13 @@ public class UserMapper {
                 .userEmail(savedUser.getEmail())
                 .userNickname(savedUser.getNickname())
                 .userPhoto(savedUser.getPhoto())
+                .build();
+    }
+
+    public UserLogInResponseInfo getUserLogInResponseInfo (User user)
+    {
+        return UserLogInResponseInfo.builder()
+                .userUuid(user.getUuid())
                 .build();
     }
 }
