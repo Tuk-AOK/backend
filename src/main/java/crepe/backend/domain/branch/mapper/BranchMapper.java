@@ -44,6 +44,7 @@ public class BranchMapper {
                     .feedbackMessage(feedback.getMessage())
                     .feedbackUserUuid(feedback.getUser().getUuid())
                     .feedbackUuid(feedback.getUuid())
+                    .feedbackStatus(feedback.getStatus())
                     .build());
         }
         return branchFeedbackInfos;
@@ -89,5 +90,19 @@ public class BranchMapper {
             fileInfos.add(Arrays.asList(resource.getName(), resource.getLink()));
         }
         return fileInfos;
+    }
+
+    public BranchRecentLogResourceInfoList getBranchRecentLogResourceInfoList(List<Resource> recentLogResources)
+    {
+        List<BranchRecentLogResourceInfo> branchRecentLogResourceInfos = new ArrayList<>();
+
+        for(Resource resource: recentLogResources) {
+            branchRecentLogResourceInfos.add(BranchRecentLogResourceInfo.builder()
+                    .fileName(resource.getName())
+                    .fileLink(resource.getLink())
+                    .build());
+        }
+
+        return new BranchRecentLogResourceInfoList(branchRecentLogResourceInfos);
     }
 }

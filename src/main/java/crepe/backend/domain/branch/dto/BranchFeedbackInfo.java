@@ -1,6 +1,7 @@
 package crepe.backend.domain.branch.dto;
 
 
+import crepe.backend.domain.feedback.domain.entity.FeedbackStatus;
 import lombok.*;
 
 import java.util.UUID;
@@ -15,4 +16,5 @@ public class BranchFeedbackInfo {
     private String feedbackMessage;
     private UUID feedbackUserUuid;
     private UUID feedbackUuid;
+    private FeedbackStatus feedbackStatus;
 }

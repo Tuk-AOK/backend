@@ -7,11 +7,10 @@ import crepe.backend.domain.project.dto.ProjectInfoList;
 import crepe.backend.domain.project.exception.NotFoundProjectEntityException;
 import crepe.backend.domain.user.domain.entity.User;
 import crepe.backend.domain.project.domain.entity.UserProject;
-import crepe.backend.domain.user.dto.UserCreate;
-import crepe.backend.domain.user.dto.UserCreateInfo;
-import crepe.backend.domain.user.dto.UserInfo;
+import crepe.backend.domain.user.dto.*;
 import crepe.backend.domain.project.domain.repository.UserProjectRepository;
 import crepe.backend.domain.user.domain.repository.UserRepository;
+import crepe.backend.domain.user.exception.NotFoundUserPasswordException;
 import crepe.backend.domain.user.mapper.UserMapper;
 import crepe.backend.global.service.S3Service;
 import lombok.RequiredArgsConstructor;
@@ -44,8 +43,9 @@ public class UserService {
     }
 
     // uuid로 유저 찾기
-    public UserInfo findUserInfoById(UUID userUuid) {
+    public UserInfo findUserInfoByUuId(UUID userUuid) {
         User findUser = findUserByUuid(userUuid);
+
         return userMapper.mapUserEntityToUserInfo(findUser);
     }
 
@@ -61,6 +61,24 @@ public class UserService {
     public void deleteUser(UUID userUuid) {
         User user = findUserByUuid(userUuid);
         userRepository.deleteById(user.getId());
+    }
+
+    public UserLogInResponseInfo userLogIn (String userEmail, String userPassword)
+    {
+
+        System.out.println(userEmail);
+
+
+        User findUser = userRepository.findUserByEmailAndIsActiveTrue(userEmail).orElseThrow(NotFoundUserEntityException::new);
+
+        if(findUser.getPassword().equals(userPassword))
+        {
+            return userMapper.getUserLogInResponseInfo(findUser);
+        }
+        else
+        {
+            throw new NotFoundUserPasswordException();
+        }
     }
 
     // 해당 uuid의 유저를 얻기 위한 함수

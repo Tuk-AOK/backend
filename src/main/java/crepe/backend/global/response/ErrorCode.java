@@ -10,6 +10,8 @@ public enum ErrorCode {
     // user
     USER_NOT_FOUND(400, "U001", "유저를 찾기 실패"),
     USER_EVENT_DUPLICATION(400, "U002", "중복된 유저"),
+    USER_NOT_FOUND_PASSWORD(400, "U003", "비밀번호를 찾을 수 없음"),
+    USER_NULL_POINT(400,"U004","값이 비어있습니다."),
 
     // project
     PROJECT_NOT_FOUND(400, "P001", "프로젝트 찾기 실패"),
@@ -36,6 +38,7 @@ public enum ErrorCode {
 
     // feedback
     FEEDBACK_NOT_FOUND(400, "F001", "피드백 찾기 실패"),
+    FEEDBACK_NOT_FOUND_STATUS_ERROR(400, "F003", "잘못된 피드백 상태 값"),
 
     // dummy
     DUMMY_ERROR(400, "D001", "여기서 에러 발생"),

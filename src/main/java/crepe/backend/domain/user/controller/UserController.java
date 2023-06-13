@@ -1,15 +1,15 @@
 package crepe.backend.domain.user.controller;
 
 import crepe.backend.domain.project.dto.ProjectInfoList;
-import crepe.backend.domain.user.dto.UserCreate;
-import crepe.backend.domain.user.dto.UserCreateInfo;
-import crepe.backend.domain.user.dto.UserInfo;
+import crepe.backend.domain.user.dto.*;
+import crepe.backend.domain.user.exception.NullPointException;
 import crepe.backend.domain.user.service.UserService;
 import crepe.backend.global.response.ResultResponse;
 import crepe.backend.global.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,11 +34,25 @@ public class UserController {
         return ResponseEntity.ok(ResultResponse.of(CREATE_USER_SUCCESS, userInfo));
     }
 
+    @GetMapping
+    public ResponseEntity<ResultResponse> LogIn(@Valid @RequestParam String userEmail, @RequestParam String userPassword)
+    {
+        if(StringUtils.isEmpty(userEmail) || StringUtils.isEmpty(userPassword))
+        {
+            throw new NullPointException();
+        }
+        else
+        {
+            UserLogInResponseInfo userLogInInfo = userService.userLogIn(userEmail, userPassword);
+            return ResponseEntity.ok(ResultResponse.of(USER_LOGIN_SUCCESS, userLogInInfo));
+        }
+    }
+
     // UUID를 이용해 유저 찾기
     @GetMapping("/{uuid}")
-    public ResponseEntity<ResultResponse> findById(@PathVariable UUID uuid)
+    public ResponseEntity<ResultResponse> findByUuId(@PathVariable UUID uuid)
     {
-        UserInfo userInfo = userService.findUserInfoById(uuid);
+        UserInfo userInfo = userService.findUserInfoByUuId(uuid);
         return ResponseEntity.ok(ResultResponse.of(READ_ONE_USER_SUCCESS, userInfo));
     }
 
@@ -54,6 +68,4 @@ public class UserController {
         userService.deleteUser(uuid);
         return ResponseEntity.ok(ResultResponse.of(DELETE_USER_SUCCESS, ""));
     }
-
-
 }

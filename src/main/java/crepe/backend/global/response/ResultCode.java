@@ -9,6 +9,7 @@ public enum ResultCode {
 
     // user
     CREATE_USER_SUCCESS(200, "U001", "사용자 추가 성공"),
+    USER_LOGIN_SUCCESS(200, "U002", "로그인 성공"),
     READ_ONE_USER_SUCCESS(200, "U003", "사용자 정보 조회 성공"),
     UPDATE_USER_SUCCESS(200, "U004", "사용자 정보 수정 성공"),
     DELETE_USER_SUCCESS(200, "U005", "사용자 삭제 성공"),
@@ -39,15 +40,15 @@ public enum ResultCode {
     UPDATE_BRANCH_SUCCESS(200,"B004", "브랜치 정보 수정 성공"),
     DELETE_BRANCH_SUCCESS(200,"B005", "브랜치 삭제 성공"),
     READ_BRANCH_RECENT_LOG_SUCCESS(200, "B006", "특정 브랜치 최신 로그 정보 조회 성공"),
-
     READ_BRANCH_MERGE_LIST(200, "B007", "브랜치 머지 리스트 조회 성공"),
     READ_BRANCH_FEEDBACK_LIST_SUCCESS(200, "B008", "브랜치 피드백 리스트 조회 성공"),
+    READ_BRANCH_RECENT_LOG_RESOURCE(200, "B009", "특정 브랜치 최신 로그 리소스 정보 조회 성공"),
 
 
     // feedback
     CREATE_FEEDBACK_SUCCESS(200, "F001", "피드백 생성 성공"),
-    DELETE_FEEDBACK_SUCCESS(200, "F002", "피드백 삭제 성공")
-
+    DELETE_FEEDBACK_SUCCESS(200, "F002", "피드백 삭제 성공"),
+    UPDATE_FEEDBACK_STATUS_CHANGE_SUCCESS(200, "F003", "피드백 상태 변경 성공")
 
     ;
 

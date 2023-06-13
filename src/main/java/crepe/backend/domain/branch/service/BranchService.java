@@ -241,4 +241,16 @@ public class BranchService {
 
         return mergeResourceInfos;
     }
+    public BranchRecentLogResourceInfoList findBranchRecentLogResource(UUID branchUuid)
+    {
+        Branch branch = getBranchByUuid(branchUuid);
+
+        Log log = getRecentLogByBranch(branch);
+
+        List<Layer> layers = layerRepository.findAllByLogAndIsActiveTrueOrderBySequence(log);
+
+        List<Resource> resources = getResourcesByLayer(layers);
+
+        return branchMapper.getBranchRecentLogResourceInfoList(resources);
+    }
 }

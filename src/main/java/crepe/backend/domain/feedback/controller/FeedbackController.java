@@ -2,6 +2,8 @@ package crepe.backend.domain.feedback.controller;
 
 import crepe.backend.domain.feedback.dto.FeedbackCreate;
 import crepe.backend.domain.feedback.dto.FeedbackCreateInfo;
+import crepe.backend.domain.feedback.dto.FeedbackStatusRequest;
+import crepe.backend.domain.feedback.exception.NotFoundFeedbackStatusException;
 import crepe.backend.domain.feedback.service.FeedbackService;
 import crepe.backend.global.response.ResultResponse;
 import lombok.RequiredArgsConstructor;
@@ -10,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import java.util.Map;
 import java.util.UUID;
 
+import static crepe.backend.global.response.ErrorCode.FEEDBACK_NOT_FOUND_STATUS_ERROR;
 import static crepe.backend.global.response.ResultCode.*;
 
 @RequiredArgsConstructor
@@ -46,5 +48,20 @@ public class FeedbackController {
     public ResponseEntity<ResultResponse> deleteFeedback(@PathVariable UUID uuid) {
         feedbackService.deleteFeedback(uuid);
         return ResponseEntity.ok(ResultResponse.of(DELETE_FEEDBACK_SUCCESS, ""));
+    }
+
+    @PatchMapping("/{uuid}")
+    public ResponseEntity<ResultResponse> updateFeedbackStatus(@PathVariable UUID uuid, @RequestBody FeedbackStatusRequest feedbackStatus)
+    {
+        if(feedbackStatus.getFeedbackStatus() == null)
+        {
+            throw new NotFoundFeedbackStatusException();
+        }
+        else
+        {
+            feedbackService.updateFeedbackStatus(uuid, feedbackStatus);
+        }
+
+        return ResponseEntity.ok(ResultResponse.of(UPDATE_FEEDBACK_STATUS_CHANGE_SUCCESS, ""));
     }
 }
