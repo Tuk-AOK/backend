@@ -14,8 +14,9 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class ProjectInfo {
-    private String projectName;
+    private Long projectId;
     private UUID projectUuid;
+    private String projectName;
     private String projectIntro;
     private String projectPreview;
     private LocalDateTime projectCreatedAt;

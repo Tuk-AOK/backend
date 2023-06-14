@@ -59,8 +59,9 @@ public class ProjectMapper {
 
     public ProjectInfo mapProjectEntityToProjectInfoResponse(Project project) {
         return ProjectInfo.builder()
-                .projectName(project.getName())
+                .projectId(project.getId())
                 .projectUuid(project.getUuid())
+                .projectName(project.getName())
                 .projectIntro(project.getIntro())
                 .projectPreview(project.getPreview())
                 .projectCreatedAt(project.getCreatedAt())
