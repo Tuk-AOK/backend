@@ -1,15 +1,13 @@
 package crepe.backend.domain.branch.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Getter
-@RequiredArgsConstructor
 @Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class BranchRecentLogResourceInfo {
 
-    private final String fileName;
-
-    private final String fileLink;
+    private String fileName;
+    private String fileLink;
 }
