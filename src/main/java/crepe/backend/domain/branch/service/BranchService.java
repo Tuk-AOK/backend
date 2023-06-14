@@ -45,14 +45,23 @@ public class BranchService {
         Branch newBranch = branchMapper.mapBranchCreateToBranch(createRequest, foundProject);
         Branch savedBranch = branchRepository.save(newBranch);
 
+        Branch mainBranch = branchRepository.findAllByProjectIdAndIsActiveTrueOrderByCreatedAt(createRequest.getProjectId()).get(0);
+        Log recentLog = logRepository.findAllByBranchAndIsActiveTrueOrderByCreatedAtDesc(mainBranch).get(0);
+        List<Layer> findLayers = layerRepository.findAllByLogAndIsActiveTrueOrderBySequence(recentLog);
+
+        Log createLog = branchCreateLog(recentLog, newBranch);
+
+        for(Layer layer : findLayers)
+        {
+            createLayerEntity(createLog, layer);
+        }
+
         return branchMapper.mapBranchEntityToBranchCreateInfo(savedBranch);
     }
-
 
     private Project getProjectById(Long projectId) {
         return projectRepository.findProjectByIdAndIsActiveTrue(projectId).orElseThrow(NotFoundProjectEntityException::new);
     }
-
 
     public BranchInfo findBranchInfoByUuId(UUID uuid) { // 특정 브랜치의 정보를 찾을 때 사용하는 모듈
         Branch findBranch = findBranchByUuid(uuid);
@@ -252,5 +261,28 @@ public class BranchService {
         List<Resource> resources = getResourcesByLayer(layers);
 
         return branchMapper.getBranchRecentLogResourceInfoList(resources);
+    }
+
+    private void createLayerEntity(Log log, Layer oldlayer) {
+        Layer layer = Layer.builder()
+                .log(log)
+                .resource(oldlayer.getResource())
+                .sequence(oldlayer.getSequence())
+                .build();
+
+        layerRepository.save(layer);
+    }
+
+    private Log branchCreateLog(Log oldLog, Branch mainBranch)
+    {
+        Log log = Log.builder()
+                .user(oldLog.getUser())
+                .branch(mainBranch)
+                .message("MainBranch's Log")
+                .preview(oldLog.getPreview())
+                .build();
+
+        logRepository.save(log);
+        return log;
     }
 }
