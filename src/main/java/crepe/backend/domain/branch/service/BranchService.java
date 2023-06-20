@@ -76,15 +76,13 @@ public class BranchService {
         return branchMapper.getLogInfoList(logs);
     }
 
-    public List<BranchFeedbackInfo> findFeedbackInfoByUuid(UUID branchUuid, int page)
-    {
+    public List<BranchFeedbackInfo> findFeedbackInfoByUuid(UUID branchUuid, int page) {
         Pageable pageable = PageRequest.of(page, 10);
         Branch findBranch = findBranchByUuid(branchUuid);
         return branchMapper.mapBranchEntityToBranchFeedbackInfos(getFeedbackListByBranch(findBranch, pageable));
     }
 
-    private Page<Feedback> getFeedbackListByBranch(Branch branch, Pageable pageable)
-    {
+    private Page<Feedback> getFeedbackListByBranch(Branch branch, Pageable pageable) {
         return feedbackRepository.findAllByBranchAndIsActiveTrueOrderByCreatedAtDesc(branch, pageable);
     }
 
@@ -92,8 +90,7 @@ public class BranchService {
         return branchRepository.findBranchByUuidAndIsActiveTrue(uuid).orElseThrow(NotFoundBranchEntityException::new);
     }
 
-    public Branch findBranchById(Long id)
-    {
+    public Branch findBranchById(Long id) {
         return branchRepository.findBranchByIdAndIsActiveTrue(id).orElseThrow(NotFoundBranchEntityException::new);
     }
 
@@ -103,8 +100,7 @@ public class BranchService {
         return logs;
     }
 
-    public void updateBranchInfo(UUID uuid, Map<String, String> branch)
-    {
+    public void updateBranchInfo(UUID uuid, Map<String, String> branch) {
         Branch oBranch = findBranchByUuid(uuid);
 
         oBranch.updateBranch(branch.get("name"));
