@@ -24,4 +24,6 @@ public interface BranchRepository extends JpaRepository<Branch, Long> {
     Optional<Branch> findBranchByProjectAndIsActiveTrueAndName(Project project, String name);
   
     Page<Branch> findAllByProjectAndIsActiveTrueOrderByIdDesc(Project project, Pageable pageable);
+
+    List<Branch> findAllByProjectIdAndIsActiveTrueOrderByCreatedAt(Long projectId);
 }
