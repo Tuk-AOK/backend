@@ -225,7 +225,6 @@ public class BranchService {
         }
         // 브랜치에 리소스 요소가 남은 경우
         if (!branchFileInfos.isEmpty()) {
-            System.out.println(branchFileInfos);//로깅
             for (List<String> branchFileInfo: branchFileInfos) {
                 mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
                         branchFileInfo.get(0),
