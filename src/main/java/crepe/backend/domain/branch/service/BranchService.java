@@ -173,6 +173,7 @@ public class BranchService {
 
 
         while ((!branchFileInfos.isEmpty()) &&(!mainFileInfos.isEmpty())) {
+
             // 브랜치의 0번 요소 가져오기
             String currData = branchFileInfos.get(0).get(0);
             // 메인에 해당 파일이 있는지 검사
@@ -224,11 +225,11 @@ public class BranchService {
         }
         // 브랜치에 리소스 요소가 남은 경우
         if (!branchFileInfos.isEmpty()) {
-
+            System.out.println(branchFileInfos);//로깅
             for (List<String> branchFileInfo: branchFileInfos) {
                 mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
-                        branchFileInfos.get(0).get(0),
-                        branchFileInfos.get(0).get(1),
+                        branchFileInfo.get(0),
+                        branchFileInfo.get(1),
                         false,
                         true));
             }
@@ -237,8 +238,8 @@ public class BranchService {
         if (!mainFileInfos.isEmpty()) {
             for (List<String> mainFileInfo: mainFileInfos) {
                 mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
-                        mainFileInfos.get(0).get(0),
-                        mainFileInfos.get(0).get(1),
+                        mainFileInfo.get(0),
+                        mainFileInfo.get(1),
                         false,
                         false));
             }
