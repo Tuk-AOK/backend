@@ -34,12 +34,12 @@ public class UserController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<ResultResponse> SignIn(@Valid @RequestParam String userEmail, @RequestParam String userPassword) {
-        if(StringUtils.isEmpty(userEmail) || StringUtils.isEmpty(userPassword)) {
+    public ResponseEntity<ResultResponse> SignIn(@Valid @RequestBody UserLogInRequestInfo userLogInRequestInfo) {
+        if(userLogInRequestInfo.getUserEmail().isEmpty() || userLogInRequestInfo.getUserPassword().isEmpty()) {
             throw new NullPointException();
         }
         else {
-            UserLogInResponseInfo userLogInInfo = userService.userLogIn(userEmail, userPassword);
+            UserLogInResponseInfo userLogInInfo = userService.userLogIn(userLogInRequestInfo);
             return ResponseEntity.ok(ResultResponse.of(USER_LOGIN_SUCCESS, userLogInInfo));
         }
     }

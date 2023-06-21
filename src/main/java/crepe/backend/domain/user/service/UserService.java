@@ -45,16 +45,12 @@ public class UserService {
     // uuid로 유저 찾기
     public UserInfo findUserInfoByUuId(UUID userUuid) {
         User findUser = findUserByUuid(userUuid);
-
         return userMapper.mapUserEntityToUserInfo(findUser);
     }
 
-    public void updateUserInfo(UUID userUuid, Map<String, String> user)
-    {
+    public void updateUserInfo(UUID userUuid, Map<String, String> user) {
         User oUser = findUserByUuid(userUuid);
-
         oUser.updateUser(user.get("email"), user.get("password"), user.get("nickname"), user.get("photo"));
-
         userRepository.save(oUser);
     }
 
@@ -63,37 +59,27 @@ public class UserService {
         userRepository.deleteById(user.getId());
     }
 
-    public UserLogInResponseInfo userLogIn (String userEmail, String userPassword)
-    {
+    public UserLogInResponseInfo userLogIn (UserLogInRequestInfo userLogInRequestInfo) {
+        User findUser = userRepository.findUserByEmailAndIsActiveTrue(userLogInRequestInfo.getUserEmail()).orElseThrow(NotFoundUserEntityException::new);
 
-        System.out.println(userEmail);
-
-
-        User findUser = userRepository.findUserByEmailAndIsActiveTrue(userEmail).orElseThrow(NotFoundUserEntityException::new);
-
-        if(findUser.getPassword().equals(userPassword))
-        {
+        if(findUser.getPassword().equals(userLogInRequestInfo.getUserPassword())) {
             return userMapper.getUserLogInResponseInfo(findUser);
         }
-        else
-        {
+        else {
             throw new NotFoundUserPasswordException();
         }
     }
 
     // 해당 uuid의 유저를 얻기 위한 함수
-    public User findUserByUuid(UUID userUuid)
-    {
+    public User findUserByUuid(UUID userUuid) {
         return userRepository.findUserByUuidAndIsActiveTrue(userUuid).orElseThrow(NotFoundUserEntityException::new);
     }
 
-    private Page<UserProject> findUserProjectByUser(User user, Pageable pageable)
-    {
+    private Page<UserProject> findUserProjectByUser(User user, Pageable pageable) {
         return userProjectRepository.findAllByUserAndIsActiveTrueOrderByIdDesc(user, pageable);
     }
 
-    public User findUserById(Long userId)
-    {
+    public User findUserById(Long userId) {
         return userRepository.findUserByIdAndIsActiveTrue(userId).orElseThrow(NotFoundUserEntityException::new);
     }
 }
