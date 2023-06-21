@@ -84,15 +84,13 @@ public class BranchService {
         return branchMapper.getLogInfoList(logs);
     }
 
-    public List<BranchFeedbackInfo> findFeedbackInfoByUuid(UUID branchUuid, int page)
-    {
+    public List<BranchFeedbackInfo> findFeedbackInfoByUuid(UUID branchUuid, int page) {
         Pageable pageable = PageRequest.of(page, 10);
         Branch findBranch = findBranchByUuid(branchUuid);
         return branchMapper.mapBranchEntityToBranchFeedbackInfos(getFeedbackListByBranch(findBranch, pageable));
     }
 
-    private Page<Feedback> getFeedbackListByBranch(Branch branch, Pageable pageable)
-    {
+    private Page<Feedback> getFeedbackListByBranch(Branch branch, Pageable pageable) {
         return feedbackRepository.findAllByBranchAndIsActiveTrueOrderByCreatedAtDesc(branch, pageable);
     }
 
@@ -100,8 +98,7 @@ public class BranchService {
         return branchRepository.findBranchByUuidAndIsActiveTrue(uuid).orElseThrow(NotFoundBranchEntityException::new);
     }
 
-    public Branch findBranchById(Long id)
-    {
+    public Branch findBranchById(Long id) {
         return branchRepository.findBranchByIdAndIsActiveTrue(id).orElseThrow(NotFoundBranchEntityException::new);
     }
 
@@ -111,8 +108,7 @@ public class BranchService {
         return logs;
     }
 
-    public void updateBranchInfo(UUID uuid, Map<String, String> branch)
-    {
+    public void updateBranchInfo(UUID uuid, Map<String, String> branch) {
         Branch oBranch = findBranchByUuid(uuid);
 
         oBranch.updateBranch(branch.get("name"));
@@ -185,6 +181,7 @@ public class BranchService {
 
 
         while ((!branchFileInfos.isEmpty()) &&(!mainFileInfos.isEmpty())) {
+
             // 브랜치의 0번 요소 가져오기
             String currData = branchFileInfos.get(0).get(0);
             // 메인에 해당 파일이 있는지 검사
@@ -236,11 +233,10 @@ public class BranchService {
         }
         // 브랜치에 리소스 요소가 남은 경우
         if (!branchFileInfos.isEmpty()) {
-
             for (List<String> branchFileInfo: branchFileInfos) {
                 mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
-                        branchFileInfos.get(0).get(0),
-                        branchFileInfos.get(0).get(1),
+                        branchFileInfo.get(0),
+                        branchFileInfo.get(1),
                         false,
                         true));
             }
@@ -249,8 +245,8 @@ public class BranchService {
         if (!mainFileInfos.isEmpty()) {
             for (List<String> mainFileInfo: mainFileInfos) {
                 mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(
-                        mainFileInfos.get(0).get(0),
-                        mainFileInfos.get(0).get(1),
+                        mainFileInfo.get(0),
+                        mainFileInfo.get(1),
                         false,
                         false));
             }
