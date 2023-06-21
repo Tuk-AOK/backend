@@ -28,21 +28,17 @@ public class UserController {
 
     // API 테스트를 위한 유저 추가
     @PostMapping
-    public ResponseEntity<ResultResponse> createUser(@Valid @ModelAttribute UserCreate userCreateRequest)
-    {
+    public ResponseEntity<ResultResponse> createUser(@Valid @ModelAttribute UserCreate userCreateRequest) {
         UserCreateInfo userInfo = userService.userCreate(userCreateRequest);
         return ResponseEntity.ok(ResultResponse.of(CREATE_USER_SUCCESS, userInfo));
     }
 
-    @GetMapping
-    public ResponseEntity<ResultResponse> LogIn(@Valid @RequestParam String userEmail, @RequestParam String userPassword)
-    {
-        if(StringUtils.isEmpty(userEmail) || StringUtils.isEmpty(userPassword))
-        {
+    @PostMapping("/signin")
+    public ResponseEntity<ResultResponse> SignIn(@Valid @RequestParam String userEmail, @RequestParam String userPassword) {
+        if(StringUtils.isEmpty(userEmail) || StringUtils.isEmpty(userPassword)) {
             throw new NullPointException();
         }
-        else
-        {
+        else {
             UserLogInResponseInfo userLogInInfo = userService.userLogIn(userEmail, userPassword);
             return ResponseEntity.ok(ResultResponse.of(USER_LOGIN_SUCCESS, userLogInInfo));
         }
@@ -50,15 +46,13 @@ public class UserController {
 
     // UUID를 이용해 유저 찾기
     @GetMapping("/{uuid}")
-    public ResponseEntity<ResultResponse> findByUuId(@PathVariable UUID uuid)
-    {
+    public ResponseEntity<ResultResponse> findByUuId(@PathVariable UUID uuid) {
         UserInfo userInfo = userService.findUserInfoByUuId(uuid);
         return ResponseEntity.ok(ResultResponse.of(READ_ONE_USER_SUCCESS, userInfo));
     }
 
     @PatchMapping("/{uuid}")
-    public ResponseEntity<ResultResponse> updateUser(@PathVariable UUID uuid, @RequestBody Map<String,String> request)
-    {
+    public ResponseEntity<ResultResponse> updateUser(@PathVariable UUID uuid, @RequestBody Map<String,String> request) {
         userService.updateUserInfo(uuid, request);
         return ResponseEntity.ok(ResultResponse.of(UPDATE_USER_SUCCESS, ""));
     }
