@@ -46,17 +46,25 @@ public class BranchService {
         Branch savedBranch = branchRepository.save(newBranch);
 
         Branch mainBranch = branchRepository.findAllByProjectIdAndIsActiveTrueOrderByCreatedAt(createRequest.getProjectId()).get(0);
-        Log recentLog = logRepository.findAllByBranchAndIsActiveTrueOrderByCreatedAtDesc(mainBranch).get(0);
-        List<Layer> findLayers = layerRepository.findAllByLogAndIsActiveTrueOrderBySequence(recentLog);
 
-        Log createLog = branchCreateLog(recentLog, newBranch);
-
-        for(Layer layer : findLayers)
+        if(mainBranch.getLogs().size() == 0)
         {
-            createLayerEntity(createLog, layer);
+            return branchMapper.mapBranchEntityToBranchCreateInfo(savedBranch);
         }
+        else
+        {
+            Log recentLog = logRepository.findAllByBranchAndIsActiveTrueOrderByCreatedAtDesc(mainBranch).get(0);
+            List<Layer> findLayers = layerRepository.findAllByLogAndIsActiveTrueOrderBySequence(recentLog);
 
-        return branchMapper.mapBranchEntityToBranchCreateInfo(savedBranch);
+            Log createLog = branchCreateLog(recentLog, newBranch);
+
+            for(Layer layer : findLayers)
+            {
+                createLayerEntity(createLog, layer);
+            }
+
+            return branchMapper.mapBranchEntityToBranchCreateInfo(savedBranch);
+        }
     }
 
     private Project getProjectById(Long projectId) {
