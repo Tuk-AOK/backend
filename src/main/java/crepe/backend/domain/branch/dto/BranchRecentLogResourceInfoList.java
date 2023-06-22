@@ -13,13 +13,11 @@ public class BranchRecentLogResourceInfoList {
 
     List<BranchRecentLogResourceInfo> recentResource = new ArrayList<>();
 
-    public void addAllBranchRecentLogResourceInfo(List<BranchRecentLogResourceInfo> branchRecentLogResourceInfoList)
-    {
-            this.recentResource.addAll(branchRecentLogResourceInfoList);
+    public void addAllBranchRecentLogResourceInfo(List<BranchRecentLogResourceInfo> branchRecentLogResourceInfoList) {
+        this.recentResource.addAll(branchRecentLogResourceInfoList);
     }
 
-    public void addBranchRecentLogResourceInfo(BranchRecentLogResourceInfo branchRecentLogResourceInfo)
-        {
-            this.recentResource.add(branchRecentLogResourceInfo);
-        }
+    public void addBranchRecentLogResourceInfo(BranchRecentLogResourceInfo branchRecentLogResourceInfo) {
+        this.recentResource.add(branchRecentLogResourceInfo);
+    }
 }

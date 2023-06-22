@@ -12,13 +12,11 @@ import java.util.List;
 public class MergeResourceInfoList {
     List<MergeResourceInfo> mergeResourceInfos = new ArrayList<>();
 
-    public void addAllMergeResourceInfo(List<MergeResourceInfo> mergeResourceInfos)
-    {
+    public void addAllMergeResourceInfo(List<MergeResourceInfo> mergeResourceInfos) {
         this.mergeResourceInfos.addAll(mergeResourceInfos);
     }
 
-    public void addMergeResourceInfo(MergeResourceInfo mergeResourceInfo)
-    {
+    public void addMergeResourceInfo(MergeResourceInfo mergeResourceInfo) {
         this.mergeResourceInfos.add(mergeResourceInfo);
     }
 }
