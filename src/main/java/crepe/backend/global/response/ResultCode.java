@@ -13,6 +13,7 @@ public enum ResultCode {
     READ_ONE_USER_SUCCESS(200, "U003", "사용자 정보 조회 성공"),
     UPDATE_USER_SUCCESS(200, "U004", "사용자 정보 수정 성공"),
     DELETE_USER_SUCCESS(200, "U005", "사용자 삭제 성공"),
+    READ_USER_NICKNAME_SUCCESS(200, "U006", "닉네임 사용자 정보 조회 성공"),
 
     // project
     CREATE_PROJECT_SUCCESS(200,"P001", "프로젝트 생성 성공"),
