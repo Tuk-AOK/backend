@@ -11,6 +11,7 @@ import crepe.backend.domain.user.dto.*;
 import crepe.backend.domain.project.domain.repository.UserProjectRepository;
 import crepe.backend.domain.user.domain.repository.UserRepository;
 import crepe.backend.domain.user.exception.NotFoundUserPasswordException;
+import crepe.backend.domain.user.exception.NullPointException;
 import crepe.backend.domain.user.mapper.UserMapper;
 import crepe.backend.global.service.S3Service;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +71,20 @@ public class UserService {
         }
     }
 
+    public UserNicknameInfo findUserNicknameInfo(Map<String, String> userNickname)
+    {
+        if(userNickname.get("userNickname").equals(null))
+        {
+            throw new NullPointException();
+        }
+        else
+        {
+            User findUser = findUserByNickname(userNickname.get("userNickname"));
+
+            return userMapper.mapUserNicknameInfoToUser(findUser);
+        }
+    }
+
     // 해당 uuid의 유저를 얻기 위한 함수
     public User findUserByUuid(UUID userUuid) {
         return userRepository.findUserByUuidAndIsActiveTrue(userUuid).orElseThrow(NotFoundUserEntityException::new);
@@ -82,4 +97,10 @@ public class UserService {
     public User findUserById(Long userId) {
         return userRepository.findUserByIdAndIsActiveTrue(userId).orElseThrow(NotFoundUserEntityException::new);
     }
+
+    private User findUserByNickname(String userNickname)
+    {
+        return userRepository.findUserByNicknameAndIsActiveTrue(userNickname).orElseThrow(NotFoundUserEntityException::new);
+    }
+
 }

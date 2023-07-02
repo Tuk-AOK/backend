@@ -5,11 +5,8 @@ import crepe.backend.domain.project.domain.entity.UserProject;
 import crepe.backend.domain.project.dto.ProjectInfo;
 import crepe.backend.domain.project.dto.ProjectInfoList;
 import crepe.backend.domain.user.domain.entity.User;
-import crepe.backend.domain.user.dto.UserCreate;
-import crepe.backend.domain.user.dto.UserCreateInfo;
-import crepe.backend.domain.user.dto.UserInfo;
+import crepe.backend.domain.user.dto.*;
 
-import crepe.backend.domain.user.dto.UserLogInResponseInfo;
 import crepe.backend.global.service.S3Service;
 import lombok.RequiredArgsConstructor;
 
@@ -56,6 +53,13 @@ public class UserMapper {
     public UserLogInResponseInfo getUserLogInResponseInfo (User user)
     {
         return UserLogInResponseInfo.builder()
+                .userUuid(user.getUuid())
+                .build();
+    }
+
+    public UserNicknameInfo mapUserNicknameInfoToUser(User user)
+    {
+        return UserNicknameInfo.builder()
                 .userUuid(user.getUuid())
                 .build();
     }
