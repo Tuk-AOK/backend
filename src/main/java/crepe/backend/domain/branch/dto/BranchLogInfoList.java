@@ -12,12 +12,10 @@ import java.util.List;
 public class BranchLogInfoList {
 
     List<BranchLogInfo> logs = new ArrayList<>();
-
     public void addAllBranchLogInfo(List<BranchLogInfo> branchLogInfoList)
     {
         this.logs.addAll(branchLogInfoList);
     }
-
     public void addBranchLogInfo(BranchLogInfo branchLogInfo)
     {
         this.logs.add(branchLogInfo);

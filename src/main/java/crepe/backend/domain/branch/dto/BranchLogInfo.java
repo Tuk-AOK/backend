@@ -10,8 +10,6 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class BranchLogInfo {
-
     private UUID logUuid;
     private LocalDateTime logCreatedAt;
-
 }

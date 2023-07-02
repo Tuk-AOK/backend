@@ -9,8 +9,5 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class BranchCreateInfo {
-
     private UUID branchUuid;
-
-
 }

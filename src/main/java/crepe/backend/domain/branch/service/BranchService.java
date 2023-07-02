@@ -139,6 +139,21 @@ public class BranchService {
         //메인브랜치는 삭제 될 일 없으니 0번 받아옴
         Branch mainBranch = branch.getProject().getBranches().get(0);
 
+        if (mainBranch.getLogs().isEmpty()) {
+            List<MergeResourceInfo> mergeResourceInfos = new ArrayList<>();
+            Log log = getRecentLogByBranch(branch);
+            List<Layer> layers = layerRepository.findAllByLogAndIsActiveTrueOrderBySequence(log);
+            List<Resource> resources = getResourcesByLayer(layers);
+
+            for (Resource resource: resources){
+                mergeResourceInfos.add(branchMapper.mapMergeResourceInfo(resource.getName(),
+                        resource.getLink(),
+                        false,
+                        true));
+            }
+            return mergeResourceInfos;
+        }
+
         // isActive 상태의 가장 최신 로그
         Log log = getRecentLogByBranch(branch);
         Log mainLog = getRecentLogByBranch(mainBranch);
@@ -176,7 +191,7 @@ public class BranchService {
         int index = 0;
         boolean isIn = false;
 
-        List<List<String>> branchFileInfos =branchMapper. getFileInfoList(resources);
+        List<List<String>> branchFileInfos =branchMapper.getFileInfoList(resources);
         List<List<String>> mainFileInfos = branchMapper.getFileInfoList(mainResources);
 
 
@@ -257,13 +272,9 @@ public class BranchService {
     public BranchRecentLogResourceInfoList findBranchRecentLogResource(UUID branchUuid)
     {
         Branch branch = getBranchByUuid(branchUuid);
-
         Log log = getRecentLogByBranch(branch);
-
         List<Layer> layers = layerRepository.findAllByLogAndIsActiveTrueOrderBySequence(log);
-
         List<Resource> resources = getResourcesByLayer(layers);
-
         return branchMapper.getBranchRecentLogResourceInfoList(resources);
     }
 

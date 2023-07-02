@@ -9,9 +9,6 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class BranchCreate {
-
     private String name;
-
     private Long projectId;
-
 }

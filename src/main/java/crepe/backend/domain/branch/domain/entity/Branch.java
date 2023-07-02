@@ -53,6 +53,4 @@ public class Branch extends BaseEntity {
     {
         this.name = name;
     }
-
-
 }
