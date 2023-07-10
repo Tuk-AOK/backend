@@ -63,8 +63,8 @@ public class UserController {
         return ResponseEntity.ok(ResultResponse.of(DELETE_USER_SUCCESS, ""));
     }
 
-    @GetMapping("/nickname")
-    public ResponseEntity<ResultResponse> findByNickname(@Valid @RequestBody Map<String,String> userNickname) {
+    @GetMapping("/nickname/{userNickname}")
+    public ResponseEntity<ResultResponse> findByNickname(@Valid @PathVariable String userNickname) {
         UserNicknameInfo userNicknameInfo = userService.findUserNicknameInfo(userNickname);
         return ResponseEntity.ok(ResultResponse.of(READ_USER_NICKNAME_SUCCESS, userNicknameInfo));
     }

@@ -71,15 +71,15 @@ public class UserService {
         }
     }
 
-    public UserNicknameInfo findUserNicknameInfo(Map<String, String> userNickname)
+    public UserNicknameInfo findUserNicknameInfo(String userNickname)
     {
-        if(userNickname.get("userNickname").equals(null))
+        if(userNickname.equals(null))
         {
             throw new NullPointException();
         }
         else
         {
-            User findUser = findUserByNickname(userNickname.get("userNickname"));
+            User findUser = findUserByNickname(userNickname);
 
             return userMapper.mapUserNicknameInfoToUser(findUser);
         }
