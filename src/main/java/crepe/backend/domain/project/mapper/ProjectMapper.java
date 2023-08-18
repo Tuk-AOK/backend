@@ -45,6 +45,7 @@ public class ProjectMapper {
                     .branchId(branch.getId())
                     .branchUuid(branch.getUuid())
                     .branchName(branch.getName())
+                    .updatedAt(branch.getUpdatedAt())
                     .build());
         }
         return new ProjectBranchInfoList(projectBranchInfos);

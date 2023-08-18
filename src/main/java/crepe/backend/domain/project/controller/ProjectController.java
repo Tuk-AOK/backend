@@ -24,6 +24,7 @@ import java.util.UUID;
 import java.util.*;
 
 import static crepe.backend.global.response.ErrorCode.PAGE_ERROR;
+import static crepe.backend.global.response.ResultCode.*;
 
 @RequestMapping("/api/v1/projects")
 @RestController
@@ -91,4 +92,15 @@ public class ProjectController {
         return  ResponseEntity.ok(ResultResponse.of(ResultCode.READ_PROJECT_MAIN_RESOURCE_SUCCESS, resource.getLink()));
     }
 
+    @DeleteMapping("/{project_uuid}/users/{user_uuid}")
+    public ResponseEntity<ResultResponse> deleteProject(@PathVariable UUID project_uuid, @PathVariable UUID user_uuid) {
+        projectService.deleteProjectByUuid(project_uuid, user_uuid);
+        return ResponseEntity.ok(ResultResponse.of(DELETE_PROJECT_SUCCESS, ""));
+    }
+
+    @DeleteMapping("/{project_uuid}/deleter/{deleter_uuid}/target/{target_uuid}")
+    public ResponseEntity<ResultResponse> deleteUserInProject(@PathVariable UUID project_uuid, @PathVariable UUID deleter_uuid, @PathVariable UUID target_uuid) {
+        projectService.deleteUser(project_uuid, deleter_uuid, target_uuid);
+        return ResponseEntity.ok(ResultResponse.of(DELETE_PROJECT_USER_SUCCESS, ""));
+    }
 }

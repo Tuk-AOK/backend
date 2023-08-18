@@ -15,6 +15,7 @@ public enum ErrorCode {
 
     // project
     PROJECT_NOT_FOUND(400, "P001", "프로젝트 찾기 실패"),
+    PROJECT_NOT_ALLOW(400,"P002","허용되지 않은 접근"),
 
     // branch
     BRANCH_NOT_FOUND(400, "B001", "브랜치 찾기 실패"),

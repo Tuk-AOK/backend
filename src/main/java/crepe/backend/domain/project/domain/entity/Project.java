@@ -4,6 +4,7 @@ import crepe.backend.domain.branch.domain.entity.Branch;
 import crepe.backend.domain.project.dto.ProjectCreateRequest;
 import crepe.backend.global.domain.BaseEntity;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import java.io.File;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE project SET is_active = false WHERE id=?")
 @Table(name = "project")
 public class Project extends BaseEntity {
     @Id

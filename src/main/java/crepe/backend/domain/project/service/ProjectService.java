@@ -14,6 +14,7 @@ import crepe.backend.domain.project.dto.*;
 import crepe.backend.domain.project.domain.entity.Project;
 import crepe.backend.domain.project.domain.repository.ProjectRepository;
 import crepe.backend.domain.project.exception.EventDuplicationUserException;
+import crepe.backend.domain.project.exception.NotAllowProjectException;
 import crepe.backend.domain.project.exception.NotFoundProjectEntityException;
 import crepe.backend.domain.project.exception.NotFoundResourceEntity;
 import crepe.backend.domain.project.mapper.ProjectMapper;
@@ -108,6 +109,65 @@ public class ProjectService {
         return projectMapper.getProjectInfoList(projects);
     }
 
+    public void deleteProjectByUuid(UUID projectUuid, UUID userUuid)
+    {
+        User user = findUserByUuid(userUuid);
+        Project project = getProjectByUuid(projectUuid);
+
+        List<UserProject> userProject = getUserProject(project);
+
+        for(UserProject userProjects: userProject)
+        {
+            if(userProjects.getUser().getId() == user.getId())
+            {
+                if(userProjects.isAdmin() == true)
+                {
+                    projectRepository.deleteById(project.getId());
+                    List<UserProject> userProject1 = getUserProjectByProjectId(project.getId());
+                    List<Branch> branch = branchRepository.findAllByProjectIdAndIsActiveTrueOrderByCreatedAt(project.getId());
+
+                    for(UserProject userProject2 : userProject1)
+                    {
+                        userProjectRepository.deleteById(userProject2.getId());
+                    }
+
+                    for(Branch branch1 : branch)
+                    {
+                        branchRepository.deleteById(branch1.getId());
+                    }
+                }
+                else
+                {
+                    throw new NotAllowProjectException();
+                }
+            }
+        }
+    }
+
+    public void deleteUser(UUID projectUuid, UUID deleterUuid, UUID targetUuid)
+    {
+        User deleter = findUserByUuid(deleterUuid);
+        User target = findUserByUuid(targetUuid);
+        Project project = getProjectByUuid(projectUuid);
+
+        List<UserProject> userProject = getUserProject(project);
+
+        for(UserProject userProjects: userProject)
+        {
+            if(userProjects.getUser().getId() == deleter.getId())
+            {
+                if(userProjects.isAdmin() == true)
+                {
+                    UserProject userProject1 = getUserProjectByUserId(target.getId(), project.getId());
+                    userProjectRepository.deleteById(userProject1.getId());
+                }
+                else
+                {
+                    throw new NotAllowProjectException();
+                }
+            }
+        }
+    }
 
     public User findUserByUuid(UUID uuid)
     {
@@ -161,5 +221,15 @@ public class ProjectService {
     private List<UserProject> getUserProject(Project project)
     {
         return userProjectRepository.findAllByProjectAndIsActiveTrue(project);
+    }
+
+    private List<UserProject> getUserProjectByProjectId(Long projectId)
+    {
+        return userProjectRepository.findAllByProjectIdAndIsActiveTrue(projectId);
+    }
+
+    private UserProject getUserProjectByUserId(Long userId, Long projectId)
+    {
+        return userProjectRepository.findUserProjectByUserIdAndProjectIdAndIsActiveTrue(userId, projectId).orElseThrow(NotFoundUserEntityException::new);
     }
 }
