@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -20,5 +21,9 @@ public interface UserProjectRepository extends JpaRepository<UserProject, Long> 
     Page<UserProject> findAllByProjectAndIsActiveTrueOrderByIdDesc(Project projectByUuid, Pageable pageable);
 
     List<UserProject> findAllByProjectAndIsActiveTrue(Project project);
+
+    List<UserProject> findAllByProjectIdAndIsActiveTrue(Long projectId);
+
+    Optional<UserProject> findUserProjectByUserIdAndProjectIdAndIsActiveTrue(Long userId, Long projectId);
 
 }

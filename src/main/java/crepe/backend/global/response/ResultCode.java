@@ -26,6 +26,7 @@ public enum ResultCode {
     UPDATE_PROJECT_PREVIEW_SUCCESS(200, "P008", "프로젝트 프리뷰 이미지 수정 완료"),
     READ_ALL_USER_PROJECT_SUCCESS(200, "P009", "전체 프로젝트 조회 성공"),
     READ_PROJECT_MAIN_RESOURCE_SUCCESS(200, "P010", "특정 프로젝트의 메인 브랜치의 특정 리소스 조회 성공"),
+    DELETE_PROJECT_USER_SUCCESS(200, "P011", "프로젝트에 참여중인 유저 삭제 성공"),
 
 
 
