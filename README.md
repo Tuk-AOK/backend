@@ -1,5 +1,5 @@
 # Crepe
-<img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=200&section=header&text=Crepe : 원격 저장소를 활용한 그래픽 레이어 관리 플랫폼&fontSize=90" />
+Crepe : 원격 저장소를 활용한 그래픽 레이어 관리 플랫폼
 
 ## System Architecture
 ![image](https://user-images.githubusercontent.com/86936466/228773897-a1444678-e58d-4df9-9e94-ef930778a048.png)
