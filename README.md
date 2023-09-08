@@ -6,6 +6,10 @@ Crepe : 원격 저장소를 활용한 그래픽 레이어 관리 플랫폼
 
 - [System Architecture](#system-architecture)
 - [Flow](#flow)
+- [stacks](#stacks)
+- [File Directory](#file-directory)
+- [Sprint](#sprint)
+- [Members](#members)
 
 ## System Architecture
 ![image](https://user-images.githubusercontent.com/86936466/228773897-a1444678-e58d-4df9-9e94-ef930778a048.png)
