@@ -1,13 +1,68 @@
 # Crepe
-<img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=200&section=header&text=Crepe : 원격 저장소를 활용한 그래픽 레이어 관리 플랫폼&fontSize=90" />
+Crepe : 원격 저장소를 활용한 그래픽 레이어 관리 플랫폼
+
+
+## Content
+
+- [System Architecture](#system-architecture)
+- [Flow](#flow)
 
 ## System Architecture
 ![image](https://user-images.githubusercontent.com/86936466/228773897-a1444678-e58d-4df9-9e94-ef930778a048.png)
 
+
+## Flow
+![Scenario](https://github.com/Tuk-AOK/backend-v2/assets/104223829/9c405b7c-6fdb-4068-abc4-53e792df6685)
+
+
+## Entity Relationship Diagram
+![ERD](https://github.com/Tuk-AOK/backend-v2/assets/104223829/f5e2d7bd-6a24-4e99-9ae6-2c90ad8a7df2)
+
+
 ## Stacks
+tools
+
+IntelliJ / Visual Studio Code
+
+platform
+
+GitHub / Docker / Postman
+
+Language
+
+Java11 / CSS / HTML / TypeScript / SQL
+
+DataBase
+
+MySQL / Redis
+
+Server
+
+AWS EC2 / AWS CloudFront / AWS S3
+
+Software Configuration Management
+
+Git
+
+comunnication
+
+Discord / Kakao Talk / Google Meet / Notion
+
+## File Directory
+
+<details>
+<summary>FRONTEND</summary>
+
+</details>
+<details>
+<summary>BACKEND</summary>
+
+</details>
+
 
 ## Sprint
 [Jira Roadmap](https://sdylockon.atlassian.net/jira/software/projects/CREP/boards/2/roadmap)
+
 
 ## Members
 <table width="950">
